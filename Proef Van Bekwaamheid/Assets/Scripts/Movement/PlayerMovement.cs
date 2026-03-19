@@ -8,17 +8,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        // Accessing Character Controller attached to the player
         cController = GetComponent<CharacterController>();
     }
 
     private void Update()
     {
         // Pc Controls
-        if (Input.GetKeyDown(KeyCode.D)) Movement("Right");
-        if (Input.GetKeyDown(KeyCode.A)) Movement("Left");
-        if (Input.GetKeyDown(KeyCode.W)) Movement("Forward");
-        if (Input.GetKeyDown(KeyCode.S)) Movement("Back");
+        if (Input.GetKeyDown(KeyCode.D)) 
+            Movement("Right");
+
+        if (Input.GetKeyDown(KeyCode.A)) 
+            Movement("Left");
+
+        if (Input.GetKeyDown(KeyCode.W)) 
+            Movement("Forward");
+
+        if (Input.GetKeyDown(KeyCode.S)) 
+            Movement("Back");
     }
 
     // Player Movements

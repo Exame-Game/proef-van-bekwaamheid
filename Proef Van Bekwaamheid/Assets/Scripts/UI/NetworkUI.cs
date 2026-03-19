@@ -14,14 +14,14 @@ public class NetworkUI : MonoBehaviour
     [SerializeField] private string ipAddress;
 
     [Header("UI Panels")]
-    [SerializeField] private GameObject connectPanel;       // ConnectNetworkUIElement
-    [SerializeField] private GameObject disconnectPanel;    // DisconnectNetworkUIElement
-    [SerializeField] private GameObject controllerPanel;    // ControllerUIElement
+    [SerializeField] private GameObject connectPanel;
+    [SerializeField] private GameObject disconnectPanel;    
+    [SerializeField] private GameObject controllerPanel;    
 
     [Header("References")]
-    [SerializeField] private ToggleGameObject toggler;      // ToggleGameObject script reference
+    [SerializeField] private ToggleGameObject toggler;      
 
-    private PlayerMovement _movement;
+    private PlayerMovement _movement; 
     private bool _pcAssigned;
 
     void Start()
@@ -119,6 +119,50 @@ public class NetworkUI : MonoBehaviour
         ResetAfterDisconnect();
     }
 
+    public string GetLocalIPAddress()
+    {
+        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                ipAddressText.text = ip.ToString();
+                ipAddress = ip.ToString();
+                return ip.ToString();
+            }
+
+        throw new System.Exception("No network adapters with an IPv4 address in the system!");
+    }
+
+    public void SetIpAddress()
+    {
+        transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.ConnectionData.Address = ipAddress;
+    }
+
+    public void Right() 
+    { 
+        if (_pcAssigned) 
+            _movement.Movement("Right"); 
+    }
+
+    public void Left() 
+    { 
+        if (_pcAssigned) 
+            _movement.Movement("Left"); 
+    }
+
+    public void Forward() 
+    { 
+        if (_pcAssigned) 
+            _movement.Movement("Forward"); 
+    }
+
+    public void Back() 
+    { 
+        if (_pcAssigned) 
+            _movement.Movement("Back"); 
+    }
+
     private void OnClientConnected(ulong clientId)
     {
         if (clientId == NetworkManager.Singleton.LocalClientId)
@@ -174,30 +218,6 @@ public class NetworkUI : MonoBehaviour
         InvokeRepeating(nameof(assignPlayerController), 0.1f, 0.1f);
     }
 
-    public string GetLocalIPAddress()
-    {
-        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (IPAddress ip in host.AddressList)
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                ipAddressText.text = ip.ToString();
-                ipAddress = ip.ToString();
-                return ip.ToString();
-            }
-        throw new System.Exception("No network adapters with an IPv4 address in the system!");
-    }
-
-    public void SetIpAddress()
-    {
-        transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-        transport.ConnectionData.Address = ipAddress;
-    }
-
-    public void Right() { if (_pcAssigned) _movement.Movement("Right"); }
-    public void Left() { if (_pcAssigned) _movement.Movement("Left"); }
-    public void Forward() { if (_pcAssigned) _movement.Movement("Forward"); }
-    public void Back() { if (_pcAssigned) _movement.Movement("Back"); }
-
     private void Initialize()
     {
         ipAddress = "0.0.0.0";
@@ -215,6 +235,7 @@ public class NetworkUI : MonoBehaviour
     {
         if (_movement == null)
             _movement = FindFirstObjectByType<PlayerMovement>();
+
         else if (_movement == FindFirstObjectByType<PlayerMovement>())
         {
             _pcAssigned = true;

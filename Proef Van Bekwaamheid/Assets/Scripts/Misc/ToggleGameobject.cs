@@ -1,14 +1,13 @@
-// ToggleGameObject.cs
 using UnityEngine;
 using DG.Tweening;
 
 public class ToggleGameObject : MonoBehaviour
 {
     [Header("Tween Settings")]
-    public float tweenDuration = 0.3f;
     public Ease easeIn = Ease.OutBack;
     public Ease easeOut = Ease.InBack;
     public Vector3 hiddenOffset = new Vector3(-500f, 0f, 0f);
+    public float tweenDuration = 0.3f;
 
     public void ToggleActive(GameObject obj)
     {
@@ -48,7 +47,6 @@ public class ToggleGameObject : MonoBehaviour
             .OnComplete(() => obj.SetActive(false));
     }
 
-    // Instantly hide with no tween — used for resetting state
     public void HideInstant(GameObject obj)
     {
         if (obj == null) return;
