@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class NetworkController : MonoBehaviour
 {
-    private PlayerMovement _movement;
+    private TestNetworkingMovement _movement;
     private bool _pcAssigned;
 
     private void Start()
@@ -31,9 +31,9 @@ public class NetworkController : MonoBehaviour
     {
         if (_movement == null)
         {
-            _movement = FindFirstObjectByType<PlayerMovement>();
+            _movement = FindFirstObjectByType<TestNetworkingMovement>();
         }
-        else if (_movement == FindFirstObjectByType<PlayerMovement>())
+        else if (_movement == FindFirstObjectByType<TestNetworkingMovement>())
         {
             _pcAssigned = true;
             CancelInvoke();
