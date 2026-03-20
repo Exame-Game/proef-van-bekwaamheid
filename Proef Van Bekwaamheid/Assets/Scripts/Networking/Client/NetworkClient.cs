@@ -2,11 +2,14 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using TMPro;
+using UnityEditor.MemoryProfiler;
 
-public class NetworkClient : MonoBehaviour
+public class NetworkClient : NetworkBehaviour
 {
     [SerializeField] private UnityTransport transport;
     [SerializeField] private TMP_InputField ipInput;
+
+    [SerializeField] private ConnectionStatus connectionStatus;
 
     public System.Action<bool> OnConnectionChanged;
 
@@ -36,6 +39,7 @@ public class NetworkClient : MonoBehaviour
         }
 
         Debug.Log($"Connecting to: {ipAddress}");
+        connectionStatus.OnConnectButtonClicked();
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientFailedToConnect;
     }

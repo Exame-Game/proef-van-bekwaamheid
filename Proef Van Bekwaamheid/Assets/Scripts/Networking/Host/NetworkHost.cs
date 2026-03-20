@@ -5,7 +5,7 @@ using TMPro;
 using System.Net;
 using System.Net.Sockets;
 
-public class NetworkHost : MonoBehaviour
+public class NetworkHost : NetworkBehaviour
 {
     [SerializeField] private UnityTransport transport;
     [SerializeField] private TextMeshProUGUI ipAddressText;
@@ -31,16 +31,17 @@ public class NetworkHost : MonoBehaviour
             OnConnectionChanged?.Invoke(true);
         }
         else
-        {
             Debug.LogError("Failed to start host. Port may already be in use.");
-        }
     }
 
     public void StopHost()
     {
         NetworkManager.Singleton.Shutdown();
         ResetAddress();
-        if (ipAddressText != null) ipAddressText.text = string.Empty;
+
+        if (ipAddressText != null) 
+            ipAddressText.text = string.Empty;
+
         OnConnectionChanged?.Invoke(false);
     }
 

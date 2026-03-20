@@ -1804,6 +1804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b91660b3664f73438cd9ff6cfcb2853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkClient
+  ShowTopMostFoldoutHeaderGroup: 1
   transport: {fileID: 807391434}
   ipInput: {fileID: 1849008157}
 --- !u!114 &687442838
@@ -1818,6 +1819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446bfc32bf883ad499ee1ff887353231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkHost
+  ShowTopMostFoldoutHeaderGroup: 1
   transport: {fileID: 807391434}
   ipAddressText: {fileID: 332370537}
 --- !u!4 &687442839
@@ -4540,8 +4542,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509324241}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.3826837, y: 0, z: 0, w: 0.9238795}
+  m_LocalPosition: {x: 0, y: -41.74875, z: -14.020805}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4673,7 +4675,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -5326,14 +5328,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1800668855}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.29237175, y: 0, z: 0, w: 0.9563048}
-  m_LocalPosition: {x: 0.6378174, y: 26.785961, z: -47.29713}
+  m_LocalRotation: {x: 0.6360785, y: -0, z: -0, w: 0.77162445}
+  m_LocalPosition: {x: 0.6378174, y: 20.988766, z: -3.6401377}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1509324242}
   m_Father: {fileID: 1544510874}
-  m_LocalEulerAnglesHint: {x: 34, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 79, y: 0, z: 0}
 --- !u!1 &1833918765
 GameObject:
   m_ObjectHideFlags: 0
