@@ -1525,8 +1525,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db5b2dd7001f3c418b8a886136a7484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  ShowTopMostFoldoutHeaderGroup: 1
   speed: 9
-  rotationSpeed: 0.15
+  rotationSpeed: 0.05
 --- !u!114 &1649193887
 MonoBehaviour:
   m_ObjectHideFlags: 0

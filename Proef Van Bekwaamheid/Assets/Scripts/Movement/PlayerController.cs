@@ -1,7 +1,9 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+
+public class PlayerController : NetworkBehaviour
 {
     public float speed = 1f;
     public float rotationSpeed = 0.15f;
@@ -9,6 +11,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner)
+            return;
+
         MovePlayer();
     }
     public void OnMove(InputAction.CallbackContext context)
@@ -17,6 +22,12 @@ public class PlayerController : MonoBehaviour
     }
 
     public void MovePlayer()
+    {
+        MoveServerRpc();
+    }
+
+    [ServerRpc]
+    public void MoveServerRpc()
     {
         Vector3 movement = new Vector3(_move.x, 0f, _move.y);
 
