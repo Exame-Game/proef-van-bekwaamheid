@@ -2,8 +2,9 @@ using UnityEngine;
 using Unity.Netcode;
 
 /// <summary>
-/// Manages panel visibility based on connection state.
-/// Wires up NetworkHost and NetworkClient connection events.
+/// Manages panel visibility based on connection state and role (host vs client).
+/// Host sees: connect/disconnect panels only.
+/// Client sees: connect/disconnect panels + controller panel.
 /// </summary>
 public class NetworkUI : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class NetworkUI : MonoBehaviour
     [SerializeField] private ToggleGameObject toggler;
     [SerializeField] private NetworkHost networkHost;
     [SerializeField] private NetworkClient networkClient;
+
+    private bool IsHost => NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost;
+    private bool IsClient => NetworkManager.Singleton != null && NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsHost;
 
     private void Start()
     {
@@ -49,7 +53,9 @@ public class NetworkUI : MonoBehaviour
             toggler.ToggleActive(connectPanel);
         }
 
-        toggler.ToggleActive(controllerPanel);
+        // Only clients (phones) get the controller panel toggled
+        if (IsClient)
+            toggler.ToggleActive(controllerPanel);
     }
 
     private void SetConnectedUI(bool isConnected)
@@ -59,9 +65,17 @@ public class NetworkUI : MonoBehaviour
         toggler.HideInstant(controllerPanel);
 
         if (isConnected)
+        {
             toggler.SlideIn(disconnectPanel, disconnectPanel.GetComponent<RectTransform>());
+
+            // Only slide in controller panel for clients (phones), not the host
+            if (IsClient)
+                toggler.SlideIn(controllerPanel, controllerPanel.GetComponent<RectTransform>());
+        }
         else
+        {
             toggler.SlideIn(connectPanel, connectPanel.GetComponent<RectTransform>());
+        }
     }
 
     private void OnDestroy()

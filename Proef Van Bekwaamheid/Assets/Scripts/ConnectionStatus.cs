@@ -1,81 +1,79 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class ConnectionStatus : NetworkBehaviour
+public class ConnectionStatus : MonoBehaviour
 {
     [SerializeField] private GameObject _connectingScreen;
 
     private GameObject _currentPopUp;
 
-    private InputAction _connectAction;
-    private InputAction _disconnectAction;
-
     private void Start()
     {
+        Debug.Log("<color=cyan>[ConnectionStatus] Initializing — subscribing to NetworkManager callbacks...</color>");
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
-
-        InitializeInputActions();
-    }
-
-    private void Update()
-    {
-        if (_connectAction.IsPressed())
-            OnConnectButtonClicked();
-
-        if (_disconnectAction.IsPressed())
-            OnDisconnectButtonClicked();
-    }
-
-    private void InitializeInputActions()
-    {
-        _connectAction = new InputAction(binding: "<Keyboard>/c");
-        _disconnectAction = new InputAction(binding: "<Keyboard>/d");
-
-        _connectAction.Enable();
-        _disconnectAction.Enable();
     }
 
     public void OnConnectButtonClicked()
     {
         if (NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsServer)
         {
-            Debug.Log("Already connected!");
+            Debug.LogWarning("<color=orange>[ConnectionStatus] Already connected, ignoring.</color>");
             return;
         }
 
+        Debug.Log("<color=cyan>[ConnectionStatus] Connect triggered — showing connecting screen.</color>");
         InitializeConnectingScreen();
-
-        NetworkManager.Singleton.StartClient();
-    }
-
-    private void OnDisconnectButtonClicked()
-    {
-        Debug.Log("Disconnecting...");
+        // Note: actual StartClient() is handled by NetworkClient.cs
     }
 
     private void OnClientConnected(ulong clientId)
     {
-        Destroy(_currentPopUp);
-        Debug.Log("Connected! Client ID: " + clientId);
+        if (_currentPopUp != null)
+        {
+            Destroy(_currentPopUp);
+            _currentPopUp = null;
+        }
+
+        bool isLocal = clientId == NetworkManager.Singleton.LocalClientId;
+        Debug.Log($"<color=green>[ConnectionStatus] Client connected! ID: {clientId}{(isLocal ? " (us)" : "")}</color>");
     }
 
     private void OnClientDisconnected(ulong clientId)
     {
-        Debug.Log("Disconnected! Client ID: " + clientId);
+        // Show connecting screen again if we got dropped
+        if (clientId == NetworkManager.Singleton.LocalClientId)
+        {
+            Debug.Log("<color=red>[ConnectionStatus] We disconnected — hiding connecting screen.</color>");
+            if (_currentPopUp != null)
+            {
+                Destroy(_currentPopUp);
+                _currentPopUp = null;
+            }
+        }
     }
 
     private void InitializeConnectingScreen()
     {
-        GameObject connectingScreen = Instantiate(_connectingScreen);
-        _currentPopUp = connectingScreen;
+        if (_connectingScreen == null)
+        {
+            Debug.LogError("<color=red>[ConnectionStatus] _connectingScreen prefab is null!</color>");
+            return;
+        }
+
+        if (_currentPopUp != null)
+            Destroy(_currentPopUp);
+
+        _currentPopUp = Instantiate(_connectingScreen);
+        Debug.Log("<color=cyan>[ConnectionStatus] Connecting screen instantiated.</color>");
     }
 
     private void OnDestroy()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+        if (NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+        }
     }
 }
-
