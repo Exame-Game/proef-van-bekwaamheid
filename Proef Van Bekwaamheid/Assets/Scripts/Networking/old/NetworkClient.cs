@@ -2,6 +2,8 @@ using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using TMPro;
+using System;
+using System.Runtime.CompilerServices;
 
 public class NetworkClient : NetworkBehaviour
 {
