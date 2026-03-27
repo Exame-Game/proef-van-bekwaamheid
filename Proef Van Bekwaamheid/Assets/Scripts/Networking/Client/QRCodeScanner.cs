@@ -18,6 +18,8 @@ public class QRCodeScanner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _textOut;
     [SerializeField] private RectTransform _scanArea;
 
+    public TextMeshProUGUI text;
+    public float scanInterval = 0.5f;
     public string decodedIPAddress;
 
     private WebCamTexture _camTexture;
@@ -28,7 +30,7 @@ public class QRCodeScanner : MonoBehaviour
     #if UNITY_EDITOR
             string[] tags = CurrentPlayer.ReadOnlyTags();
 
-            if (System.Array.IndexOf(tags, "Host") >= 0)
+            if (Array.IndexOf(tags, "Host") >= 0)
                 return;
             else
                 SetUpCamera();
@@ -38,13 +40,14 @@ public class QRCodeScanner : MonoBehaviour
     #else
             SetUpCamera();
     #endif
-
     }
 
     private void Update()
     {
         if (_isCamAvailable)
             UpdateCameraRender();
+        else if (!_isCamAvailable)
+            ClientUIManager.Instance.SetUIState(ClientUIState.ManualConnection);
     }
 
     public void Scan()
@@ -59,6 +62,7 @@ public class QRCodeScanner : MonoBehaviour
                 Debug.Log($"<color=green>[QRCodeScanner] QR code detected — decoded text: \"{result.Text}\"</color>");
                 _textOut.text = result.Text;
                 decodedIPAddress = result.Text;
+                ClientUIManager.Instance.SetUIState(ClientUIState.Disconnect);
             }
             else
             {

@@ -3,6 +3,8 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using System;
+using System.Collections;
+
 
 
 #if UNITY_EDITOR
@@ -33,6 +35,7 @@ public class ConnectionManager : MonoBehaviour
             hostUI.SetActive(false);
             clientUI.SetActive(true);
             QRCodeScanner.OnIPDecoded += StartClient;
+            StartCoroutine(ScanQRLoop());
         }
 #elif HOST_BUILD
         hostUI.SetActive(true);
@@ -42,6 +45,7 @@ public class ConnectionManager : MonoBehaviour
         hostUI.SetActive(false);
         clientUI.SetActive(true);
         QRCodeScanner.OnIPDecoded += StartClient;
+        StartCoroutine(ScanQRLoop());
 #endif
     }
 
@@ -56,12 +60,6 @@ public class ConnectionManager : MonoBehaviour
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(ip, 7777);
         NetworkManager.Singleton.StartClient();
-
-        while (!NetworkManager.Singleton.IsConnectedClient)
-        {
-            Debug.Log("<color=yellow>[ConnectionManager] Attempting to connect to host...</color>");
-            QRCodeScanner.Scan();
-        }
     }
 
     private string GetLocalIPAddress()
@@ -75,5 +73,17 @@ public class ConnectionManager : MonoBehaviour
             }
 
         return ip;
+    }
+
+    private IEnumerator ScanQRLoop()
+    {
+        WaitForSeconds wait = new WaitForSeconds(QRCodeScanner.scanInterval);
+        while (!NetworkManager.Singleton.IsConnectedClient)
+        {
+            QRCodeScanner.Scan();
+            yield return wait;
+        }
+
+        Debug.Log("[ConnectionManager] Connection established, stopping scan loop.");
     }
 }

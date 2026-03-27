@@ -7,6 +7,7 @@ using ZXing.QrCode;
 public class QRCodeGenerator : MonoBehaviour
 {
     [SerializeField] private RawImage rawImageReceiver;
+    [SerializeField] private TextMeshProUGUI IPText;
 
     private Texture2D _storeEncodedTexture;
 
@@ -20,6 +21,7 @@ public class QRCodeGenerator : MonoBehaviour
     {
         Debug.Log("<color=cyan>[QRCodeGenerator] GenerateQRCode() called — starting QR code generation process...</color>");
         EncodeTextToQRode(IPAddress);
+        IPText.text = IPAddress;
     }
 
     private Color32[] Encode(string textForEncoding, int width, int height)
