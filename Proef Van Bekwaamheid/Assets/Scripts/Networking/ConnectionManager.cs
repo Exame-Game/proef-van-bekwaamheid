@@ -24,7 +24,7 @@ public class ConnectionManager : MonoBehaviour
 #if UNITY_EDITOR
         string[] tags = CurrentPlayer.ReadOnlyTags();
 
-        if (System.Array.IndexOf(tags, "Host") >= 0)
+        if (Array.IndexOf(tags, "Host") >= 0)
         {
             hostUI.SetActive(true);
             clientUI.SetActive(false);
@@ -34,6 +34,7 @@ public class ConnectionManager : MonoBehaviour
         {
             hostUI.SetActive(false);
             clientUI.SetActive(true);
+            Debug.Log("<color=cyan>[ConnectionManager] Editor play mode detected — initializing as client and starting QR code scan loop...</color>");
             QRCodeScanner.OnIPDecoded += StartClient;
             StartCoroutine(ScanQRLoop());
         }
@@ -57,6 +58,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void StartClient(string ip)
     {
+        Debug.Log($"[ConnectionManager] Starting client with IP: {ip}");
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(ip, 7777);
         NetworkManager.Singleton.StartClient();
@@ -80,6 +82,7 @@ public class ConnectionManager : MonoBehaviour
         WaitForSeconds wait = new WaitForSeconds(QRCodeScanner.scanInterval);
         while (!NetworkManager.Singleton.IsConnectedClient)
         {
+            Debug.Log(NetworkManager.Singleton.IsConnectedClient);
             QRCodeScanner.Scan();
             yield return wait;
         }

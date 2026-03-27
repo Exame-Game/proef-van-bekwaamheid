@@ -30,6 +30,7 @@ public class ClientUIManager : MonoBehaviour
     {
         SetUIState(initialState);
     }
+
     public void SetUIState(ClientUIState state)
     {
         switch (state)

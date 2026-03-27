@@ -62,6 +62,7 @@ public class QRCodeScanner : MonoBehaviour
                 Debug.Log($"<color=green>[QRCodeScanner] QR code detected — decoded text: \"{result.Text}\"</color>");
                 _textOut.text = result.Text;
                 decodedIPAddress = result.Text;
+                OnIPDecoded?.Invoke(decodedIPAddress);
                 ClientUIManager.Instance.SetUIState(ClientUIState.Disconnect);
             }
             else
@@ -70,7 +71,7 @@ public class QRCodeScanner : MonoBehaviour
                 Debug.Log("<color=yellow>[QRCodeScanner] No QR code detected in current frame.</color>");
             }
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError($"<color=red>[QRCodeScanner] Error during QR code scanning: {ex.Message}</color>");
             _textOut.text = "Error scanning QR code.";
