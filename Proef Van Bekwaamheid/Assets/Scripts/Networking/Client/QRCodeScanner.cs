@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using ZXing;
 using System;
+using System.Linq;
+
 
 
 #if UNITY_EDITOR
@@ -62,8 +64,12 @@ public class QRCodeScanner : MonoBehaviour
                 Debug.Log($"<color=green>[QRCodeScanner] QR code detected — decoded text: \"{result.Text}\"</color>");
                 _textOut.text = result.Text;
                 decodedIPAddress = result.Text;
-                OnIPDecoded?.Invoke(decodedIPAddress);
-                ClientUIManager.Instance.SetUIState(ClientUIState.Disconnect);
+
+                if (ValidateIPv4(decodedIPAddress))
+                {
+                    OnIPDecoded?.Invoke(decodedIPAddress);
+                    ClientUIManager.Instance.SetUIState(ClientUIState.Controller);
+                }
             }
             else
             {
@@ -90,25 +96,6 @@ public class QRCodeScanner : MonoBehaviour
         _rawImagebackground.rectTransform.localEulerAngles = new Vector3(0, 0, orientation);
     }
 
-    //private void SetUpCamera()
-    //{
-    //    WebCamDevice[] devices = WebCamTexture.devices;
-    //    if (devices.Length == 0)
-    //    {
-    //        Debug.LogWarning("<color=orange>[QRCodeScanner] No camera devices found on this system.</color>");
-    //        _isCamAvailable = false;
-    //        return;
-    //    }
-
-    //    for(int i = 0; i < devices.Length; i++)
-    //        if (!devices[i].isFrontFacing)
-    //            _camTexture = new WebCamTexture(devices[i].name, (int)_scanArea.rect.width, (int)_scanArea.rect.height);
-
-    //    _camTexture.Play();
-    //    _rawImagebackground.texture = _camTexture;
-    //    _isCamAvailable = true;
-    //}
-
     private void SetUpCamera()
     {
         WebCamDevice[] devices = WebCamTexture.devices;
@@ -119,18 +106,14 @@ public class QRCodeScanner : MonoBehaviour
             return;
         }
 
-        // Try back-facing first, fall back to any available camera
         WebCamDevice selectedDevice = devices[0];
         foreach (var device in devices)
-        {
             if (!device.isFrontFacing)
             {
                 selectedDevice = device;
                 break;
             }
-        }
 
-        // Use a safe default resolution if scan area isn't laid out yet
         int width = _scanArea.rect.width > 0 ? (int)_scanArea.rect.width : 640;
         int height = _scanArea.rect.height > 0 ? (int)_scanArea.rect.height : 480;
 
@@ -141,4 +124,19 @@ public class QRCodeScanner : MonoBehaviour
 
         Debug.Log($"<color=cyan>[QRCodeScanner] Started camera: {selectedDevice.name} at {width}x{height}</color>");
     }
+
+    private bool ValidateIPv4(string ipString)
+    {
+        if (String.IsNullOrWhiteSpace(ipString))
+            return false;
+
+        string[] splitValues = ipString.Split('.');
+        if (splitValues.Length != 4)
+            return false;
+
+        byte tempForParsing;
+
+        return splitValues.All(r => byte.TryParse(r, out tempForParsing));
+    }
+
 }

@@ -33,33 +33,15 @@ public class ClientUIManager : MonoBehaviour
 
     public void SetUIState(ClientUIState state)
     {
-        switch (state)
-        {
-            case ClientUIState.QRScanner:
-                QRScannerUI.SetActive(true);
-                ManualConnectionUI.SetActive(false);
-                DisconnectUI.SetActive(false);
-                ControllerUI.SetActive(false);
-                break;
-            case ClientUIState.ManualConnection:
-                QRScannerUI.SetActive(false);
-                ManualConnectionUI.SetActive(true);
-                DisconnectUI.SetActive(false);
-                ControllerUI.SetActive(false);
-                break;
-            case ClientUIState.Disconnect:
-                QRScannerUI.SetActive(false);
-                ManualConnectionUI.SetActive(false);
-                DisconnectUI.SetActive(true);
-                ControllerUI.SetActive(false);
-                break;
-            case ClientUIState.Controller:
-                QRScannerUI.SetActive(false);
-                ManualConnectionUI.SetActive(false);
-                DisconnectUI.SetActive(false);
-                ControllerUI.SetActive(true);
-                break;
-        }
+        QRScannerUI.SetActive(state == ClientUIState.QRScanner);
+        ManualConnectionUI.SetActive(state == ClientUIState.ManualConnection);
+        DisconnectUI.SetActive(state == ClientUIState.Disconnect);
+        ControllerUI.SetActive(state == ClientUIState.Controller);
+    }
+
+    public void SetUIStateFromInt(int stateIndex)
+    {
+        SetUIState((ClientUIState)stateIndex);
     }
 }
 

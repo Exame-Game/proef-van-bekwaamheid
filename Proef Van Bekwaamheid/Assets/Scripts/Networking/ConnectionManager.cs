@@ -34,7 +34,11 @@ public class ConnectionManager : MonoBehaviour
         {
             hostUI.SetActive(false);
             clientUI.SetActive(true);
+
+            ClientUIManager.Instance.SetUIState(ClientUIState.QRScanner);
+
             Debug.Log("<color=cyan>[ConnectionManager] Editor play mode detected — initializing as client and starting QR code scan loop...</color>");
+            
             QRCodeScanner.OnIPDecoded += StartClient;
             StartCoroutine(ScanQRLoop());
         }
@@ -52,6 +56,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void StartHost()
     {
+        NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         QRCodeGenerator.GenerateQRCode(GetLocalIPAddress());
     }
@@ -62,6 +67,14 @@ public class ConnectionManager : MonoBehaviour
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(ip, 7777);
         NetworkManager.Singleton.StartClient();
+    }
+
+    public void StopClient()
+    {
+        if (!NetworkManager.Singleton.IsClient || NetworkManager.Singleton.IsHost)
+            return;
+
+        NetworkManager.Singleton.Shutdown();
     }
 
     private string GetLocalIPAddress()
@@ -75,6 +88,12 @@ public class ConnectionManager : MonoBehaviour
             }
 
         return ip;
+    }
+
+    private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+    {
+        response.Approved = true;
+        response.CreatePlayerObject = false;
     }
 
     private IEnumerator ScanQRLoop()
