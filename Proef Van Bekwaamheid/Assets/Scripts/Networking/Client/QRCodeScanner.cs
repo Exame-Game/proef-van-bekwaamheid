@@ -49,7 +49,7 @@ public class QRCodeScanner : MonoBehaviour
         if (_isCamAvailable)
             UpdateCameraRender();
         else if (!_isCamAvailable)
-            ClientUIManager.Instance.SetUIState(ClientUIState.ManualConnection);
+            UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
     }
 
     public void Scan()
@@ -68,7 +68,7 @@ public class QRCodeScanner : MonoBehaviour
                 if (ValidateIPv4(decodedIPAddress))
                 {
                     OnIPDecoded?.Invoke(decodedIPAddress);
-                    ClientUIManager.Instance.SetUIState(ClientUIState.Controller);
+                    UIManager.Instance.SetClientUIState(ClientUIState.Controller);
                 }
             }
             else
@@ -138,5 +138,4 @@ public class QRCodeScanner : MonoBehaviour
 
         return splitValues.All(r => byte.TryParse(r, out tempForParsing));
     }
-
 }

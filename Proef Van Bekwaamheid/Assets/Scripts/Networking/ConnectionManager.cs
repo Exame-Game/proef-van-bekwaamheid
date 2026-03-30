@@ -35,7 +35,7 @@ public class ConnectionManager : MonoBehaviour
             hostUI.SetActive(false);
             clientUI.SetActive(true);
 
-            ClientUIManager.Instance.SetUIState(ClientUIState.QRScanner);
+            UIManager.Instance.SetClientUIState(ClientUIState.QRScanner);
 
             Debug.Log("<color=cyan>[ConnectionManager] Editor play mode detected — initializing as client and starting QR code scan loop...</color>");
             
