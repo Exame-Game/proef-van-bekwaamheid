@@ -114,8 +114,8 @@ public class QRCodeScanner : MonoBehaviour
                 break;
             }
 
-        int width = _scanArea.rect.width > 0 ? (int)_scanArea.rect.width : 640;
-        int height = _scanArea.rect.height > 0 ? (int)_scanArea.rect.height : 480;
+        int width = _scanArea.rect.width > 0 ? (int)_scanArea.rect.width : 1080;
+        int height = _scanArea.rect.height > 0 ? (int)_scanArea.rect.height : 1920;
 
         _camTexture = new WebCamTexture(selectedDevice.name, width, height);
         _camTexture.Play();
