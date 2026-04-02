@@ -5,58 +5,40 @@ using UnityEngine.InputSystem;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private Rigidbody rb;
-    public float speed = 1f;
-    public float rotationSpeed = 0.15f;
+    public float speed = 7f;
+    public float rotationSpeed = 10f;
+    [Range(0f, 1f)]
+    public float inputSmoothing = 0.1f;
+
     private Vector2 _move;
-    private bool _pcAssigned;
+    private Vector2 _smoothedMove;
 
-    private void Start()
+    private void FixedUpdate()
     {
-        Debug.Log(OwnerClientId);
-        InvokeRepeating(nameof(AssignPlayerController), 0.1f, 0.1f);
-    }
-
-    private void Update()
-    {
-        Debug.Log(IsOwner);
-
-        if (!IsOwner)
-            return;
-
+        if (!IsOwner) return;
+        _smoothedMove = Vector2.Lerp(_smoothedMove, _move, inputSmoothing);
         MovePlayer();
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!IsOwner)
-            return;
-
+        if (!IsOwner) return;
         _move = context.ReadValue<Vector2>();
     }
 
-    public void MovePlayer()
+    public void SetInput(Vector2 input)
     {
-        if (!IsOwner && !_pcAssigned)
-            return;
-
-        Vector3 movement = new Vector3(_move.x, 0f, _move.y);
-
-        if (movement == Vector3.zero)
-            return;
-
-        rb.transform.rotation = Quaternion.Slerp(rb.transform.rotation, Quaternion.LookRotation(movement), rotationSpeed);
-        rb.transform.Translate(movement * speed * Time.deltaTime, Space.World);
+        if (!IsOwner) return;
+        _move = input;
     }
 
-    private void AssignPlayerController()
-    {   
-        _pcAssigned = true;
-        CancelInvoke();
-    }
-
-    public void ResetController()
+    private void MovePlayer()
     {
-        _pcAssigned = false;
-        InvokeRepeating(nameof(AssignPlayerController), 0.1f, 0.1f);
+        Vector3 movement = new Vector3(_smoothedMove.x, 0f, _smoothedMove.y);
+        if (movement.magnitude < 0.01f) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(movement);
+        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
+        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
     }
 }

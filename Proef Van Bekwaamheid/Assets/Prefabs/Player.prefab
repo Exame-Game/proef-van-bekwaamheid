@@ -390,5 +390,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
   rb: {fileID: 4003042468206252743}
-  speed: 9
-  rotationSpeed: 0.05
+  speed: 10
+  rotationSpeed: 10
+  inputSmoothing: 0.1
