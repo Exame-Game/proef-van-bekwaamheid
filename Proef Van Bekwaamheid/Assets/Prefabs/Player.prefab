@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 7965600354408160684}
   - component: {fileID: 45219539181145706}
   - component: {fileID: 7031082711442048043}
+  - component: {fileID: 7077102683588273476}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -312,7 +313,7 @@ MonoBehaviour:
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1
-  SyncPositionY: 0
+  SyncPositionY: 1
   SyncPositionZ: 1
   SyncRotAngleX: 1
   SyncRotAngleY: 1
@@ -393,3 +394,20 @@ MonoBehaviour:
   speed: 10
   rotationSpeed: 10
   inputSmoothing: 0.1
+--- !u!114 &7077102683588273476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7313588412845106964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 1
+  AutoUpdateKinematicState: 1
+  AutoSetKinematicOnDespawn: 1

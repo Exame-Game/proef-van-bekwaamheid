@@ -35,10 +35,15 @@ public class PlayerController : NetworkBehaviour
     private void MovePlayer()
     {
         Vector3 movement = new Vector3(_smoothedMove.x, 0f, _smoothedMove.y);
-        if (movement.magnitude < 0.01f) return;
 
-        Quaternion targetRotation = Quaternion.LookRotation(movement);
-        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
-        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+        if (movement.magnitude >= 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
+
+            // Preserve current Y velocity so gravity is not overridden
+            Vector3 newPosition = rb.position + movement * speed * Time.fixedDeltaTime;
+            rb.MovePosition(newPosition);
+        }
     }
 }
