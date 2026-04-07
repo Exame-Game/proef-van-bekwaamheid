@@ -18,6 +18,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Development/TestScene Player Movement/PlayerMovement.unity
     guid: b32578843c287214f810e2446a1b19bf
+  - enabled: 1
+    path: Assets/Scenes/Development/TestScene Feature Item Interaction/ItemInteraction.unity
+    guid: 7265895a49a395e4b88df5c0d48ee074
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
