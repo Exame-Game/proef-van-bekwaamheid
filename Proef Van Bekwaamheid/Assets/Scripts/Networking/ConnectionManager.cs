@@ -61,6 +61,11 @@ public class ConnectionManager : MonoBehaviour
         QRCodeGenerator.GenerateQRCode(GetLocalIPAddress());
     }
 
+    public void StopHost()
+    {
+        NetworkManager.Singleton.Shutdown();
+    }
+
     public void StartClient(string ip)
     {
         Debug.Log($"[ConnectionManager] Starting client with IP: {ip}");
