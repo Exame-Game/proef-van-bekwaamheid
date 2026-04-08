@@ -24,23 +24,6 @@ public class QRCodeGenerator : MonoBehaviour
         IPText.text = IPAddress;
     }
 
-    private Color32[] Encode(string textForEncoding, int width, int height)
-    {
-        Debug.Log($"<color=cyan>[QRCodeGenerator] Encoding QR — text: \"{textForEncoding}\" | size: {width}x{height}</color>");
-
-        BarcodeWriter writer = new BarcodeWriter
-        {
-            Format = BarcodeFormat.QR_CODE,
-            Options = new QrCodeEncodingOptions
-            {
-                Height = height,
-                Width = width
-            }
-        };
-
-        return writer.Write(textForEncoding);
-    }
-
     private void EncodeTextToQRode(string IPAddress)
     {
         string textWrite = string.IsNullOrEmpty(IPAddress)
@@ -63,5 +46,22 @@ public class QRCodeGenerator : MonoBehaviour
         rawImageReceiver.texture = _storeEncodedTexture;
 
         Debug.Log($"<color=green>[QRCodeGenerator] QR code generated and applied to RawImage for: \"{textWrite}\"</color>");
+    }
+
+    private Color32[] Encode(string textForEncoding, int width, int height)
+    {
+        Debug.Log($"<color=cyan>[QRCodeGenerator] Encoding QR — text: \"{textForEncoding}\" | size: {width}x{height}</color>");
+
+        BarcodeWriter writer = new BarcodeWriter
+        {
+            Format = BarcodeFormat.QR_CODE,
+            Options = new QrCodeEncodingOptions
+            {
+                Height = height,
+                Width = width
+            }
+        };
+
+        return writer.Write(textForEncoding);
     }
 }

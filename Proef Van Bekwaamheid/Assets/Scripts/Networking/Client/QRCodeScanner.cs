@@ -49,8 +49,7 @@ public class QRCodeScanner : MonoBehaviour
         if (_isCamAvailable)
             UpdateCameraRender();
         else if (!_isCamAvailable)
-
-        UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
+            UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
     }
 
     public void Scan()
@@ -90,7 +89,7 @@ public class QRCodeScanner : MonoBehaviour
         if (!_isCamAvailable)
             return;
 
-        float ratio = (float)_camTexture.width / (float)_camTexture.height;
+        float ratio = _camTexture.width / _camTexture.height;
         _aspectRatioFitter.aspectRatio = ratio;
         int orientation = -_camTexture.videoRotationAngle;
 

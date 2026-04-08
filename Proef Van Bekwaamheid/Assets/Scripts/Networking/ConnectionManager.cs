@@ -68,20 +68,6 @@ public class ConnectionManager : MonoBehaviour
 #endif
     }
 
-    private void OnClientDisconnected(ulong clientId)
-    {
-        if (NetworkManager.Singleton.IsHost)
-            return;
-
-        Debug.Log("[ConnectionManager] Client disconnected — restarting QR scan loop.");
-        UIManager.Instance.SetClientUIState(ClientUIState.QRScanner);
-
-        if (_scanCoroutine != null)
-            StopCoroutine(_scanCoroutine);
-
-        _scanCoroutine = StartCoroutine(ScanQRLoop());
-    }
-
     public void StartHost()
     {
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
@@ -143,6 +129,20 @@ public class ConnectionManager : MonoBehaviour
     {
         response.Approved = true;
         response.CreatePlayerObject = false;
+    }
+
+    private void OnClientDisconnected(ulong clientId)
+    {
+        if (NetworkManager.Singleton.IsHost)
+            return;
+
+        Debug.Log("[ConnectionManager] Client disconnected — restarting QR scan loop.");
+        UIManager.Instance.SetClientUIState(ClientUIState.QRScanner);
+
+        if (_scanCoroutine != null)
+            StopCoroutine(_scanCoroutine);
+
+        _scanCoroutine = StartCoroutine(ScanQRLoop());
     }
 
     private IEnumerator ScanQRLoop()
