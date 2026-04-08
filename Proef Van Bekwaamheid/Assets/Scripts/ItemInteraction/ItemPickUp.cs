@@ -21,38 +21,53 @@ public class ItemPickUp : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        if (ItemHolding)
+            CarryItem();
+
         if (interactAction.WasPressedThisFrame())
+            OnInteractPressed();
+    }
+
+    private void CarryItem()
+    {
+        ItemHolding.transform.position = PickUpPoint.position;
+        ItemHolding.transform.rotation = PickUpPoint.rotation;
+    }
+
+    private void OnInteractPressed()
+    {
+        if (ItemHolding)
+            DropItem();
+        else
+            TryPickUp();
+    }
+
+    private void TryPickUp()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 2f, PickUpLayer);
+        if (colliders.Length > 0 && PickUpPoint.childCount == 0)
+            PickUpItem(colliders[0].gameObject);
+    }
+
+    private void PickUpItem(GameObject item)
+    {
+        ItemHolding = item;
+        if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
-            if (ItemHolding)
-            {
-                ItemHolding.transform.parent = null;
-                ItemHolding.transform.position = transform.position + Direction;
-                if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody heldRb))
-                {
-                    heldRb.isKinematic = false;
-                    heldRb.useGravity = true;
-                    heldRb.detectCollisions = true;
-                }
-                ItemHolding = null;
-            }
-            else
-            {
-                Collider[] colliders = Physics.OverlapSphere(transform.position, 2f, PickUpLayer);
-                if (colliders.Length > 0 && PickUpPoint.childCount == 0)
-                {
-                    ItemHolding = colliders[0].gameObject;
-                    if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
-                    {
-                        rb.isKinematic = true;
-                        rb.useGravity = false;
-                        rb.detectCollisions = false;
-                    }
-                    ItemHolding.transform.parent = PickUpPoint;
-                    ItemHolding.transform.localPosition = Vector3.zero;
-                    ItemHolding.transform.localRotation = Quaternion.identity;
-                }
-            }
+            rb.isKinematic = true;
+            rb.useGravity = false;
         }
+    }
+
+    private void DropItem()
+    {
+        ItemHolding.transform.position = transform.position + Direction;
+        if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
+        ItemHolding = null;
     }
 
     void OnEnable() { interactAction.Enable(); }
