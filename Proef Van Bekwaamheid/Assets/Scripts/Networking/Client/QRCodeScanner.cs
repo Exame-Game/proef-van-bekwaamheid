@@ -49,7 +49,8 @@ public class QRCodeScanner : MonoBehaviour
         if (_isCamAvailable)
             UpdateCameraRender();
         else if (!_isCamAvailable)
-            UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
+
+        UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
     }
 
     public void Scan()
@@ -107,7 +108,7 @@ public class QRCodeScanner : MonoBehaviour
         }
 
         WebCamDevice selectedDevice = devices[0];
-        foreach (var device in devices)
+        foreach (WebCamDevice device in devices)
             if (!device.isFrontFacing)
             {
                 selectedDevice = device;

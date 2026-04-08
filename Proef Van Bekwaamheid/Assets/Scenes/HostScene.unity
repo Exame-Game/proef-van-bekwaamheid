@@ -2839,6 +2839,7 @@ MonoBehaviour:
   clientUI: {fileID: 168834417}
   QRCodeGenerator: {fileID: 687442840}
   QRCodeScanner: {fileID: 1854413916}
+  clientIpInputField: {fileID: 527002660}
 --- !u!1 &715246313
 GameObject:
   m_ObjectHideFlags: 0
@@ -2922,14 +2923,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: NetworkClient, Assembly-CSharp
+      - m_Target: {fileID: 687442841}
+        m_TargetAssemblyTypeName: ConnectionManager, Assembly-CSharp
         m_MethodName: StartClient
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1306163406}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SetClientUIStateFromInt
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3591,6 +3604,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SetClientUIStateFromInt
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 687442841}
+        m_TargetAssemblyTypeName: ConnectionManager, Assembly-CSharp
+        m_MethodName: StartQRLoop
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8729,6 +8754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConnectionStatus
   _connectingScreen: {fileID: 1760544364700769370, guid: b9a9558a190502243ac52d77367697f3, type: 3}
+  _currentPopUp: {fileID: 0}
 --- !u!114 &1651930884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10736,6 +10762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 250eebe7b04d2cc42a647c96ca95e04b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkController
+  _movement: {fileID: 0}
+  _pcAssigned: 0
 --- !u!1 &1972864864
 GameObject:
   m_ObjectHideFlags: 0
