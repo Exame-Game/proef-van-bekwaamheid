@@ -21,17 +21,17 @@ public class ItemPickUp : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        if (ItemHolding)
-            CarryItem();
-
         if (interactAction.WasPressedThisFrame())
             OnInteractPressed();
     }
-
-    private void CarryItem()
+    void FixedUpdate()
     {
-        ItemHolding.transform.position = PickUpPoint.position;
-        ItemHolding.transform.rotation = PickUpPoint.rotation;
+        if (!IsOwner) return;
+        if (ItemHolding && ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        {
+            rb.MovePosition(PickUpPoint.position);
+            rb.MoveRotation(PickUpPoint.rotation);
+        }
     }
 
     private void OnInteractPressed()
@@ -54,13 +54,22 @@ public class ItemPickUp : NetworkBehaviour
         ItemHolding = item;
         if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
+            rb.linearVelocity = Vector3.zero;      // clear velocity first
+            rb.angularVelocity = Vector3.zero;     // then set kinematic
             rb.isKinematic = true;
             rb.useGravity = false;
+            rb.position = PickUpPoint.position;
+            rb.rotation = PickUpPoint.rotation;
+            rb.Sleep();
         }
+        ItemHolding.transform.parent = PickUpPoint;
+        ItemHolding.transform.localPosition = Vector3.zero;
+        ItemHolding.transform.localRotation = Quaternion.identity;
     }
 
     private void DropItem()
     {
+        ItemHolding.transform.parent = null;
         ItemHolding.transform.position = transform.position + Direction;
         if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
