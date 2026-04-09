@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6856598893335877651
+--- !u!1001 &7540107464539269739
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 842568e1cadf7d040ae6d878462d09f2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.1511755
+      value: 12.84
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 842568e1cadf7d040ae6d878462d09f2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.1298664
+      value: -5.56
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 842568e1cadf7d040ae6d878462d09f2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.2075005
+      value: 6.905518
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 842568e1cadf7d040ae6d878462d09f2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: bfa8f357f58cfc040b08e319bd319794, type: 2}
     - target: {fileID: 919132149155446097, guid: 842568e1cadf7d040ae6d878462d09f2, type: 3}
       propertyPath: m_Name
-      value: Strawberry
+      value: strawberry
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
