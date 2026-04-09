@@ -7,7 +7,10 @@ public class PlayerCameraManager : MonoBehaviour
 
     [SerializeField] private CinemachineTargetGroup targetGroup;
 
-    void Awake() => Instance = this;
+    void Awake()
+    {
+        Instance = this;
+    }
 
     public void RegisterPlayer(Transform player)
     {

@@ -1,6 +1,4 @@
-// On your Player prefab
 using Unity.Netcode;
-using UnityEngine;
 
 public class PlayerNetworkSetup : NetworkBehaviour
 {

@@ -9,36 +9,34 @@ public class Roombaenemy : MonoBehaviour
     public float minWaitTime = 1f;
     public float maxWaitTime = 3f;
 
-    private NavMeshAgent agent;
-    private float waitTimer;
+    private NavMeshAgent _agent;
+    private float _waitTimer;
 
-    void Start()
+    private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();
         SetNewDestination();
     }
 
-    void Update()
+    private void Update()
     {
-        // If close enough to destination (or stuck), wait then pick a new one
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (!_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
         {
-            waitTimer -= Time.deltaTime;
-            if (waitTimer <= 0f)
+            _waitTimer -= Time.deltaTime;
+            if (_waitTimer <= 0f)
                 SetNewDestination();
         }
     }
 
-    void SetNewDestination()
+    private void SetNewDestination()
     {
         Vector3 randomPoint = GetRandomNavMeshPoint();
-        agent.SetDestination(randomPoint);
-        waitTimer = Random.Range(minWaitTime, maxWaitTime);
+        _agent.SetDestination(randomPoint);
+        _waitTimer = Random.Range(minWaitTime, maxWaitTime);
     }
 
-    Vector3 GetRandomNavMeshPoint()
+    private Vector3 GetRandomNavMeshPoint()
     {
-        // Try up to 10 times to find a valid NavMesh point
         for (int i = 0; i < 10; i++)
         {
             Vector3 randomDir = Random.insideUnitSphere * wanderRadius;
@@ -48,11 +46,10 @@ public class Roombaenemy : MonoBehaviour
                 return hit.position;
         }
 
-        return transform.position; // Fallback: stay put
+        return transform.position;
     }
 
-    // Draw wander radius in editor
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, wanderRadius);
