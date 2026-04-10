@@ -32,17 +32,17 @@ public class SaveSystemTest : MonoBehaviour
 
     private void TestAddItems()
     {
-        permanentInventory.AddItem(new ItemData { Name = "Iron Sword",   Value = 10f, Weight = 5f,  Rarity = Rarity.Common    });
-        permanentInventory.AddItem(new ItemData { Name = "Silver Bow",   Value = 50f, Weight = 3f,  Rarity = Rarity.Rare      });
-        permanentInventory.AddItem(new ItemData { Name = "Dragon Staff", Value = 99f, Weight = 8f,  Rarity = Rarity.Legendary });
-        permanentInventory.AddItem(new ItemData { Name = "Wooden Club",  Value = 5f,  Weight = 4f,  Rarity = Rarity.Common    });
+        // permanentInventory.AddItem(new ItemData { Name = "Iron Sword",   Value = 10f, Weight = 5f,  Rarity = Rarity.Common    });
+        // permanentInventory.AddItem(new ItemData { Name = "Silver Bow",   Value = 50f, Weight = 3f,  Rarity = Rarity.Rare      });
+        // permanentInventory.AddItem(new ItemData { Name = "Dragon Staff", Value = 99f, Weight = 8f,  Rarity = Rarity.Legendary });
+        // permanentInventory.AddItem(new ItemData { Name = "Wooden Club",  Value = 5f,  Weight = 4f,  Rarity = Rarity.Common    });
     }
 
     private void TestMergeAndDestroy()
     {
         InventoryData tempInventory = new InventoryData { InventoryName = "temp" };
-        tempInventory.AddItem(new ItemData { Name = "Epic Dagger", Value = 75f, Weight = 1f, Rarity = Rarity.Epic     });
-        tempInventory.AddItem(new ItemData { Name = "Magic Ring",  Value = 60f, Weight = 0f, Rarity = Rarity.Uncommon });
+        // tempInventory.AddItem(new ItemData { Name = "Epic Dagger", Value = 75f, Weight = 1f, Rarity = Rarity.Epic     });
+        // tempInventory.AddItem(new ItemData { Name = "Magic Ring",  Value = 60f, Weight = 0f, Rarity = Rarity.Uncommon });
 
         permanentInventory.AddDictionairy(tempInventory.ItemsByRarity);
         tempInventory.RemoveInventory();
