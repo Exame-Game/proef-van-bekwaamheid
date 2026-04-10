@@ -4,11 +4,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField] private Rigidbody rb;
+    [Range(0f, 1f)] public float inputSmoothing = 0.1f;
     public float speed = 7f;
     public float rotationSpeed = 10f;
-    [Range(0f, 1f)]
-    public float inputSmoothing = 0.1f;
+
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private ItemPickUp itemPickUp; 
 
     private Vector2 _move;
     private Vector2 _smoothedMove;
@@ -40,5 +41,7 @@ public class PlayerController : NetworkBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(movement);
         rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
         rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+
+        itemPickUp.Direction = movement.normalized;
     }
 }

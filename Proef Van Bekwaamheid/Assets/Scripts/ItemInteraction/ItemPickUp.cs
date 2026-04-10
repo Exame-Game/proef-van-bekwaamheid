@@ -4,13 +4,23 @@ using UnityEngine.InputSystem;
 
 public class ItemPickUp : NetworkBehaviour
 {
-    public InputActionAsset inputActions;
-    public LayerMask PickUpLayer;
     public Vector3 Direction { get; set; }
-    public Transform PickUpPoint;
 
-    private GameObject ItemHolding;
+    [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] private Transform PickUpPoint;
+    [SerializeField] private LayerMask PickUpLayer;
+
+    [SerializeField] private float throwForce = 10f;
+    [SerializeField] private float throwHoldTime = 0.3f;
+
+    [SerializeField] private float pickUpRange = 2f;
+    [SerializeField] private float pickUpOffset;
+
+    private GameObject itemHolding;
     private InputAction interactAction;
+
+    private float holdTime;
+    private bool justPickedUp;
 
     private void Awake()
     {
@@ -23,11 +33,19 @@ public class ItemPickUp : NetworkBehaviour
 
         if (interactAction.WasPressedThisFrame())
             OnInteractPressed();
+
+        if (interactAction.IsPressed() && itemHolding && !justPickedUp)
+            holdTime += Time.deltaTime;
+
+        if (interactAction.WasReleasedThisFrame())
+            OnInteractReleased();
     }
+
     void FixedUpdate()
     {
         if (!IsOwner) return;
-        if (ItemHolding && ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
+
+        if (itemHolding && itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
             rb.MovePosition(PickUpPoint.position);
             rb.MoveRotation(PickUpPoint.rotation);
@@ -36,47 +54,93 @@ public class ItemPickUp : NetworkBehaviour
 
     private void OnInteractPressed()
     {
-        if (ItemHolding)
-            DropItem();
-        else
+        holdTime = 0f;
+
+        if (itemHolding && !justPickedUp)
+            return;
+        
+        if (!itemHolding)
             TryPickUp();
+    }
+
+    private void OnInteractReleased()
+    {
+        if (justPickedUp)
+        {
+            justPickedUp = false;
+            holdTime = 0f;
+            return;
+        }
+
+        if (itemHolding)
+            if (holdTime >= throwHoldTime)
+                ThrowItem();
+            else
+                DropItem();
+        
+        holdTime = 0f;
     }
 
     private void TryPickUp()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 2f, PickUpLayer);
+        Collider[] colliders = Physics.OverlapSphere(transform.position + Direction * pickUpOffset, pickUpRange, PickUpLayer);
         if (colliders.Length > 0 && PickUpPoint.childCount == 0)
             PickUpItem(colliders[0].gameObject);
     }
 
     private void PickUpItem(GameObject item)
     {
-        ItemHolding = item;
-        if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        itemHolding = item;
+        justPickedUp = true; // flag that this press was a pickup
+
+        if (itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
-            rb.linearVelocity = Vector3.zero;      // clear velocity first
-            rb.angularVelocity = Vector3.zero;     // then set kinematic
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
             rb.useGravity = false;
             rb.position = PickUpPoint.position;
             rb.rotation = PickUpPoint.rotation;
             rb.Sleep();
         }
-        ItemHolding.transform.parent = PickUpPoint;
-        ItemHolding.transform.localPosition = Vector3.zero;
-        ItemHolding.transform.localRotation = Quaternion.identity;
+
+        itemHolding.transform.parent = PickUpPoint;
+        itemHolding.transform.localPosition = Vector3.zero;
+        itemHolding.transform.localRotation = Quaternion.identity;
     }
 
     private void DropItem()
     {
-        ItemHolding.transform.parent = null;
-        ItemHolding.transform.position = transform.position + Direction;
-        if (ItemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        itemHolding.transform.parent = null;
+        itemHolding.transform.position = transform.position + Direction;
+
+        if (itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
             rb.isKinematic = false;
             rb.useGravity = true;
         }
-        ItemHolding = null;
+
+        itemHolding = null;
+    }
+
+    private void ThrowItem()
+    {
+        itemHolding.transform.parent = null;
+
+        if (itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.AddForce(Direction * throwForce, ForceMode.Impulse);
+        }
+
+        itemHolding = null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position + Direction * pickUpOffset, pickUpRange);
     }
 
     void OnEnable() { interactAction.Enable(); }
