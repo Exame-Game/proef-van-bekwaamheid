@@ -12,13 +12,11 @@ public class ItemPickUp : NetworkBehaviour
 
     [SerializeField] private float throwForce = 10f;
     [SerializeField] private float throwHoldTime = 0.3f;
-
     [SerializeField] private float pickUpRange = 2f;
     [SerializeField] private float pickUpOffset;
 
     private GameObject itemHolding;
     private InputAction interactAction;
-
     private float holdTime;
     private bool justPickedUp;
 
@@ -58,7 +56,7 @@ public class ItemPickUp : NetworkBehaviour
 
         if (itemHolding && !justPickedUp)
             return;
-        
+
         if (!itemHolding)
             TryPickUp();
     }
@@ -73,11 +71,13 @@ public class ItemPickUp : NetworkBehaviour
         }
 
         if (itemHolding)
+        {
             if (holdTime >= throwHoldTime)
                 ThrowItem();
             else
                 DropItem();
-        
+        }
+
         holdTime = 0f;
     }
 
@@ -91,12 +91,15 @@ public class ItemPickUp : NetworkBehaviour
     private void PickUpItem(GameObject item)
     {
         itemHolding = item;
-        justPickedUp = true; // flag that this press was a pickup
+        justPickedUp = true;
+
+        if (itemHolding.TryGetComponent<NetworkObject>(out NetworkObject netObj))
+            RequestOwnershipServerRpc(netObj.NetworkObjectId);
 
         if (itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
         {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;   // zero BEFORE
+            rb.angularVelocity = Vector3.zero;  // setting kinematic
             rb.isKinematic = true;
             rb.useGravity = false;
             rb.position = PickUpPoint.position;
@@ -104,37 +107,83 @@ public class ItemPickUp : NetworkBehaviour
             rb.Sleep();
         }
 
-        itemHolding.transform.parent = PickUpPoint;
-        itemHolding.transform.localPosition = Vector3.zero;
-        itemHolding.transform.localRotation = Quaternion.identity;
+        if (itemHolding.TryGetComponent<Collider>(out Collider col))
+            col.enabled = false;
     }
 
     private void DropItem()
     {
-        itemHolding.transform.parent = null;
-        itemHolding.transform.position = transform.position + Direction;
+        if (itemHolding.TryGetComponent<NetworkObject>(out NetworkObject netObj))
+            DropItemServerRpc(netObj.NetworkObjectId, transform.position + Direction);
 
-        if (itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true;
-        }
+        if (itemHolding.TryGetComponent<Collider>(out Collider col))
+            col.enabled = true;
 
         itemHolding = null;
     }
 
     private void ThrowItem()
     {
-        itemHolding.transform.parent = null;
+        if (itemHolding.TryGetComponent<NetworkObject>(out NetworkObject netObj))
+            ThrowItemServerRpc(netObj.NetworkObjectId, transform.position + Direction, Direction);
 
-        if (itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
-        {
-            rb.isKinematic = false;
-            rb.useGravity = true;
-            rb.AddForce(Direction * throwForce, ForceMode.Impulse);
-        }
+        if (itemHolding.TryGetComponent<Collider>(out Collider col))
+            col.enabled = true;
 
         itemHolding = null;
+    }
+
+    [ServerRpc]
+    private void DropItemServerRpc(ulong networkObjectId, Vector3 dropPosition)
+    {
+        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+        {
+            netObj.RemoveOwnership();
+
+            if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                rb.position = dropPosition;
+            }
+
+            if (netObj.TryGetComponent<Collider>(out Collider col))
+                col.enabled = true;
+        }
+    }
+
+    [ServerRpc]
+    private void ThrowItemServerRpc(ulong networkObjectId, Vector3 dropPosition, Vector3 throwDirection)
+    {
+        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+        {
+            netObj.RemoveOwnership();
+
+            if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                rb.position = dropPosition;
+                rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+            }
+
+            if (netObj.TryGetComponent<Collider>(out Collider col))
+                col.enabled = true;
+        }
+    }
+
+    [ServerRpc]
+    private void RequestOwnershipServerRpc(ulong networkObjectId)
+    {
+        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+            netObj.ChangeOwnership(OwnerClientId);
+    }
+
+    [ServerRpc]
+    private void ReleaseOwnershipServerRpc(ulong networkObjectId)
+    {
+        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+            netObj.RemoveOwnership();
     }
 
     private void OnDrawGizmosSelected()
