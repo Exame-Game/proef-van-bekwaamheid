@@ -10,7 +10,11 @@ public static class SaveSystem
     private const string KEY = "your-32-char-key-here!!!!!!!!!!"; // Must be exactly 32 chars
     private const string IV  = "your-16-char-iv!";               // Must be exactly 16 chars
 
-    // ── Public API ────────────────────────────────────────────────────────────
+    /// <summary>Returns true if a save file with the given name exists.</summary>
+    public static bool Exists(string fileName)
+    {
+        return File.Exists(GetPath(fileName));
+    }
 
     /// <summary>Serialize and encrypt <paramref name="data"/> to a JSON file.</summary>
     public static void Save<T>(T data, string fileName)
@@ -21,7 +25,6 @@ public static class SaveSystem
             string encrypted = Encrypt(json);
             string path      = GetPath(fileName);
             File.WriteAllText(path: path, contents: encrypted);
-            Debug.Log($"[SaveSystem] Saved to {path}");
         }
         catch (Exception e)
         {
@@ -53,20 +56,19 @@ public static class SaveSystem
         }
     }
 
-    /// <summary>Returns true if a save file with the given name exists.</summary>
-    public static bool Exists(string fileName) => File.Exists(GetPath(fileName));
 
     /// <summary>Deletes the save file with the given name.</summary>
     public static void Delete(string fileName)
     {
         string path = GetPath(fileName);
-        if (File.Exists(path)) File.Delete(path);
+        if (File.Exists(path)) 
+            File.Delete(path);
     }
 
-    // ── Internals ─────────────────────────────────────────────────────────────
-
-    private static string GetPath(string fileName) =>
-        Path.Combine(Application.persistentDataPath, fileName + ".sav");
+    private static string GetPath(string fileName)
+    {
+        return Path.Combine(Application.persistentDataPath, fileName + ".sav");
+    }
 
     private static string Encrypt(string plainText)
     {

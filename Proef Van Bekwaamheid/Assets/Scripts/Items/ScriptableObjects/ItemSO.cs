@@ -8,7 +8,7 @@ public class ItemSO : ScriptableObject
     public GameObject Prefab;
 
     // ---ItemData---
-    public string Name;
     public float Value;
     public float Weight;
+    public string Name;
 }

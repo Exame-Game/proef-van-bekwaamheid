@@ -4,20 +4,14 @@ using TMPro;
 
 public class SaveSystemTest : MonoBehaviour
 {
-    [SerializeField] private TMP_Text receiptText;
-
+    [SerializeField] private TMP_Text _receiptText;
     [SerializeField] private string _inventoryName;
 
-    private InventoryData permanentInventory;
+    private InventoryData _permanentInventory;
 
     private void Start()
     {
-        permanentInventory = SaveSystem.Load<InventoryData>(_inventoryName);
-        if (permanentInventory.InventoryName == null)
-        {    
-            permanentInventory = new InventoryData { InventoryName = _inventoryName };
-            permanentInventory.Save();
-        }
+        Initialize();
     }
 
     private void Update()
@@ -28,6 +22,16 @@ public class SaveSystemTest : MonoBehaviour
         if (Keyboard.current.lKey.wasPressedThisFrame)     TestLoad();
         if (Keyboard.current.pKey.wasPressedThisFrame)     PrintReceipt();
         if (Keyboard.current.dKey.wasPressedThisFrame)     DeleteInventory();
+    }
+
+    private void Initialize()
+    {
+        _permanentInventory = SaveSystem.Load<InventoryData>(_inventoryName);
+        if (_permanentInventory.InventoryName != null)
+            return;
+
+        _permanentInventory = new InventoryData { InventoryName = _inventoryName };
+        _permanentInventory.Save();
     }
 
     private void TestAddItems()
@@ -44,20 +48,19 @@ public class SaveSystemTest : MonoBehaviour
         // tempInventory.AddItem(new ItemData { Name = "Epic Dagger", Value = 75f, Weight = 1f, Rarity = Rarity.Epic     });
         // tempInventory.AddItem(new ItemData { Name = "Magic Ring",  Value = 60f, Weight = 0f, Rarity = Rarity.Uncommon });
 
-        permanentInventory.AddDictionairy(tempInventory.ItemsByRarity);
+        _permanentInventory.AddDictionairy(tempInventory.ItemsByRarity);
         tempInventory.RemoveInventory();
         tempInventory = null;
-
     }
 
     private void TestSave()
     {
-        permanentInventory.Save();
+        _permanentInventory.Save();
     }
 
     private void TestLoad()
     {
-        permanentInventory = SaveSystem.Load<InventoryData>("permanent");
+        _permanentInventory = SaveSystem.Load<InventoryData>("permanent");
     }
 
     private void PrintReceipt()
@@ -66,7 +69,7 @@ public class SaveSystemTest : MonoBehaviour
         sb.AppendLine("====== RECEIPT ======");
 
         // Sort rarities highest to lowest (Legendary -> Common)
-        System.Collections.Generic.List<Rarity> sortedRarities = new System.Collections.Generic.List<Rarity>(permanentInventory.ItemsByRarity.Keys);
+        System.Collections.Generic.List<Rarity> sortedRarities = new System.Collections.Generic.List<Rarity>(_permanentInventory.ItemsByRarity.Keys);
         sortedRarities.Sort((a, b) => b.CompareTo(a));
 
         foreach (Rarity rarity in sortedRarities)
@@ -75,27 +78,25 @@ public class SaveSystemTest : MonoBehaviour
 
             // Combine duplicates by name, summing count and value
             System.Collections.Generic.Dictionary<string, (int count, float value)> counts = new System.Collections.Generic.Dictionary<string, (int, float)>();
-            foreach (ItemData item in permanentInventory.ItemsByRarity[rarity])
-            {
+            foreach (ItemData item in _permanentInventory.ItemsByRarity[rarity])            
                 if (counts.ContainsKey(item.Name))
                     counts[item.Name] = (counts[item.Name].count + 1, counts[item.Name].value + item.Value);
                 else
                     counts[item.Name] = (1, item.Value);
-            }
+            
 
             foreach (System.Collections.Generic.KeyValuePair<string, (int count, float value)> entry in counts)
                 sb.AppendLine($"    {entry.Key} x{entry.Value.count} | Value: {entry.Value.value}");
         }
 
         sb.AppendLine("=====================");
-        receiptText.text = sb.ToString();
+        _receiptText.text = sb.ToString();
     }
 
     private void DeleteInventory()
     {
-        permanentInventory.RemoveInventory();
-        permanentInventory = null;
-
-        permanentInventory = SaveSystem.Load<InventoryData>(_inventoryName);
+        _permanentInventory.RemoveInventory();
+        _permanentInventory = null;
+        _permanentInventory = SaveSystem.Load<InventoryData>(_inventoryName);
     }
 }

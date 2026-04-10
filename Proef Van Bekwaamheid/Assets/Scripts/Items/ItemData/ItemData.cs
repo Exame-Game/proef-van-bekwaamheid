@@ -1,15 +1,15 @@
 public class ItemData
 {
     public Rarity Rarity;
-    public string Name;
     public float Value;
     public float Weight;
+    public string Name;
     public ItemData(ItemSO itemSO)
     {
         Rarity = itemSO.Rarity;
-        Name = itemSO.Name;
         Value = itemSO.Value;
         Weight = itemSO.Weight;
+        Name = itemSO.Name;
     }
 }
 

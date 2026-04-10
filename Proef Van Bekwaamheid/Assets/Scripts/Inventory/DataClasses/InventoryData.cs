@@ -2,18 +2,16 @@ using System.Collections.Generic;
 
 public class InventoryData
 {
-    public string InventoryName;
     public Dictionary<Rarity, List<ItemData>> ItemsByRarity = new Dictionary<Rarity, List<ItemData>>();
+    public string InventoryName;
 
     public void AddDictionairy(Dictionary<Rarity, List<ItemData>> other)
     {
         foreach (KeyValuePair<Rarity, List<ItemData>> entry in other)
-        {
             if (ItemsByRarity.ContainsKey(entry.Key))
                 ItemsByRarity[entry.Key].AddRange(entry.Value);
             else
                 ItemsByRarity[entry.Key] = new List<ItemData>(entry.Value);
-        }
     }
 
     public void Save()
