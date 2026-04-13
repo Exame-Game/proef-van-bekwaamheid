@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 7031082711442048043}
   - component: {fileID: 7077102683588273476}
   - component: {fileID: -5258948914828406012}
+  - component: {fileID: 9152519226051496780}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -424,3 +425,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6a48464dfbbd3f47bac986e01417466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &9152519226051496780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7313588412845106964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 153e847b39361394c953c0fb0a463c63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWallOcclusion
+  ShowTopMostFoldoutHeaderGroup: 1
+  _wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _fadeAlpha: 0.15
+  _fadeSpeed: 8
