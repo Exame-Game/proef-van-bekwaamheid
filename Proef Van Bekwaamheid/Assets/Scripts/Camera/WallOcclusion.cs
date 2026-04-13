@@ -5,22 +5,28 @@ using UnityEngine;
 public class PlayerWallOcclusion : NetworkBehaviour
 {
     [Header("Settings")]
-    public LayerMask wallLayer;
-    public float fadeAlpha = 0.15f;
-    public float fadeSpeed = 8f;
+    [SerializeField] private LayerMask _wallLayer;
+    [SerializeField] private float _fadeAlpha = 0.15f;
+    [SerializeField] private float _fadeSpeed = 8f;
 
+    private Camera _cam;
     private Dictionary<Renderer, bool> _rendererStates = new Dictionary<Renderer, bool>();
     private HashSet<Renderer> _currentFrameHits = new HashSet<Renderer>();
-    private Camera _cam;
 
     public override void OnNetworkSpawn()
     {
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+
         _cam = Camera.main;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        if (_cam == null) 
+        if (_cam == null)
             return;
 
         Vector3 direction = transform.position - _cam.transform.position;
@@ -32,25 +38,28 @@ public class PlayerWallOcclusion : NetworkBehaviour
             _cam.transform.position,
             direction.normalized,
             distance,
-            wallLayer
+            _wallLayer
         );
 
         foreach (RaycastHit hit in hits)
             foreach (Renderer r in hit.collider.GetComponentsInChildren<Renderer>())
             {
+                if (_currentFrameHits.Contains(r))
+                    continue;
+
                 _currentFrameHits.Add(r);
                 _rendererStates[r] = true;
             }
 
         List<Renderer> keys = new List<Renderer>(_rendererStates.Keys);
-
         List<Renderer> toRemove = new List<Renderer>();
+
         foreach (Renderer r in keys)
         {
-            if (r == null) 
-            { 
-                toRemove.Add(r); 
-                continue; 
+            if (r == null)
+            {
+                toRemove.Add(r);
+                continue;
             }
 
             if (!_currentFrameHits.Contains(r))
@@ -61,7 +70,7 @@ public class PlayerWallOcclusion : NetworkBehaviour
             else
             {
                 bool fullyRestored = FadeIn(r);
-                if (fullyRestored) 
+                if (fullyRestored)
                     toRemove.Add(r);
             }
         }
@@ -70,43 +79,14 @@ public class PlayerWallOcclusion : NetworkBehaviour
             _rendererStates.Remove(r);
     }
 
-    void FadeOut(Renderer r)
-    {
-        foreach (Material mat in r.materials)
-        {
-            SetMaterialTransparent(mat);
-            Color c = mat.color;
-            c.a = Mathf.MoveTowards(c.a, fadeAlpha, fadeSpeed * Time.deltaTime);
-            mat.color = c;
-        }
-    }
-
-    bool FadeIn(Renderer r)
-    {
-        bool done = true;
-        foreach (Material mat in r.materials)
-        {
-            Color c = mat.color;
-            c.a = Mathf.MoveTowards(c.a, 1f, fadeSpeed * Time.deltaTime);
-            mat.color = c;
-
-            if (Mathf.Approximately(c.a, 1f))
-                SetMaterialOpaque(mat);
-            else
-                done = false;
-        }
-        return done;
-    }
-
     public override void OnNetworkDespawn()
     {
         foreach (KeyValuePair<Renderer, bool> kvp in _rendererStates)
         {
-            Renderer r = kvp.Key;
-            if (r == null) 
+            if (kvp.Key == null)
                 continue;
 
-            foreach (Material mat in r.materials)
+            foreach (Material mat in kvp.Key.materials)
             {
                 Color c = mat.color;
                 c.a = 1f;
@@ -114,10 +94,41 @@ public class PlayerWallOcclusion : NetworkBehaviour
                 SetMaterialOpaque(mat);
             }
         }
+
         _rendererStates.Clear();
     }
 
-    void SetMaterialTransparent(Material mat)
+    private void FadeOut(Renderer r)
+    {
+        foreach (Material mat in r.materials)
+        {
+            SetMaterialTransparent(mat);
+            Color c = mat.color;
+            c.a = Mathf.MoveTowards(c.a, _fadeAlpha, _fadeSpeed * Time.deltaTime);
+            mat.color = c;
+        }
+    }
+
+    private bool FadeIn(Renderer r)
+    {
+        bool isDone = true;
+
+        foreach (Material mat in r.materials)
+        {
+            Color c = mat.color;
+            c.a = Mathf.MoveTowards(c.a, 1f, _fadeSpeed * Time.deltaTime);
+            mat.color = c;
+
+            if (Mathf.Approximately(c.a, 1f))
+                SetMaterialOpaque(mat);
+            else
+                isDone = false;
+        }
+
+        return isDone;
+    }
+
+    private void SetMaterialTransparent(Material mat)
     {
         mat.SetFloat("_Mode", 3);
         mat.SetFloat("_Surface", 1);
@@ -128,7 +139,7 @@ public class PlayerWallOcclusion : NetworkBehaviour
         mat.renderQueue = 3000;
     }
 
-    void SetMaterialOpaque(Material mat)
+    private void SetMaterialOpaque(Material mat)
     {
         mat.SetFloat("_Mode", 0);
         mat.SetFloat("_Surface", 0);
