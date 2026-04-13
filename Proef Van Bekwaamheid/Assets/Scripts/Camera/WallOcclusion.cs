@@ -20,7 +20,8 @@ public class PlayerWallOcclusion : NetworkBehaviour
 
     void LateUpdate()
     {
-        if (_cam == null) return;
+        if (_cam == null) 
+            return;
 
         Vector3 direction = transform.position - _cam.transform.position;
         float distance = direction.magnitude;
@@ -35,33 +36,33 @@ public class PlayerWallOcclusion : NetworkBehaviour
         );
 
         foreach (RaycastHit hit in hits)
-        {
             foreach (Renderer r in hit.collider.GetComponentsInChildren<Renderer>())
             {
                 _currentFrameHits.Add(r);
                 _rendererStates[r] = true;
             }
-        }
 
-        // Snapshot the keys so we can safely modify the dict during iteration
         List<Renderer> keys = new List<Renderer>(_rendererStates.Keys);
 
         List<Renderer> toRemove = new List<Renderer>();
         foreach (Renderer r in keys)
         {
-            if (r == null) { toRemove.Add(r); continue; }
+            if (r == null) 
+            { 
+                toRemove.Add(r); 
+                continue; 
+            }
 
             if (!_currentFrameHits.Contains(r))
                 _rendererStates[r] = false;
 
             if (_rendererStates[r])
-            {
                 FadeOut(r);
-            }
             else
             {
                 bool fullyRestored = FadeIn(r);
-                if (fullyRestored) toRemove.Add(r);
+                if (fullyRestored) 
+                    toRemove.Add(r);
             }
         }
 
@@ -80,7 +81,6 @@ public class PlayerWallOcclusion : NetworkBehaviour
         }
     }
 
-    // Returns true when fully restored to opaque
     bool FadeIn(Renderer r)
     {
         bool done = true;
@@ -91,23 +91,21 @@ public class PlayerWallOcclusion : NetworkBehaviour
             mat.color = c;
 
             if (Mathf.Approximately(c.a, 1f))
-            {
                 SetMaterialOpaque(mat);
-            }
             else
-            {
                 done = false;
-            }
         }
         return done;
     }
 
     public override void OnNetworkDespawn()
     {
-        foreach (var kvp in _rendererStates)
+        foreach (KeyValuePair<Renderer, bool> kvp in _rendererStates)
         {
             Renderer r = kvp.Key;
-            if (r == null) continue;
+            if (r == null) 
+                continue;
+
             foreach (Material mat in r.materials)
             {
                 Color c = mat.color;
