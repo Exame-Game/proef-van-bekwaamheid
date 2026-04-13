@@ -15,12 +15,6 @@ public class PlayerWallOcclusion : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner)
-        {
-            enabled = false;
-            return;
-        }
-
         _cam = Camera.main;
     }
 

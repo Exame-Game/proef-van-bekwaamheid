@@ -439,8 +439,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWallOcclusion
   ShowTopMostFoldoutHeaderGroup: 1
-  wallLayer:
+  _wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  fadeAlpha: 0.15
-  fadeSpeed: 8
+  _fadeAlpha: 0.15
+  _fadeSpeed: 8
