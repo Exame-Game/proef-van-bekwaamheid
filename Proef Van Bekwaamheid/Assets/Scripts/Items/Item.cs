@@ -11,4 +11,30 @@ public class Item : MonoBehaviour
         _data = new ItemData(_itemSO);
         _prefab = _itemSO.Prefab;
     }
+
+    private void Start()
+    {
+        SpawnItem();
+    }
+
+    private void SpawnItem()
+    {
+        GameObject itemPrefab = Instantiate(_prefab);
+        itemPrefab.transform.SetParent(transform);
+        itemPrefab.transform.localPosition = Vector3.zero;
+    }
+
+    private void EnterToInventory(InventoryData inventoryData)
+    {
+        inventoryData.AddItem(_data);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Inventory")
+        {
+            Inventory inventory = other.GetComponent<Inventory>();
+            inventory.InventoryData.AddItem(_data);
+        }
+    }
 }
