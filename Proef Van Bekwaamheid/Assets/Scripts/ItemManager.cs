@@ -76,7 +76,6 @@ public class ItemManager : MonoBehaviour
             return;
 
         _items.Add(item);
-        item.transform.parent = _itemParent.transform;
         _currentItems++;
     }
 
@@ -85,7 +84,6 @@ public class ItemManager : MonoBehaviour
         if (_items.Contains(item))
         {
             _items.Remove(item);
-            item.transform.parent = null;
             _currentItems--;
         }
     }

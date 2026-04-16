@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 5237426530210261057}
   - component: {fileID: 6826437502661227270}
   - component: {fileID: -2105364363351224997}
-  m_Layer: 0
+  - component: {fileID: 7032795978450782349}
+  m_Layer: 3
   m_Name: Painting_Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,6 +70,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.0479088, y: 4.7935963, z: 2.6425018}
   m_Center: {x: -0.5239544, y: 0.5276437, z: 0.017425537}
+--- !u!54 &7032795978450782349
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9103284719556943739}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 112
+  m_CollisionDetection: 1
 --- !u!1001 &2205546188313511497
 PrefabInstance:
   m_ObjectHideFlags: 0
