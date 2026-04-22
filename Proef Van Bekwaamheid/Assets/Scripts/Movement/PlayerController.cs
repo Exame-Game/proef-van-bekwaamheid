@@ -4,44 +4,65 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
-    [Range(0f, 1f)] public float inputSmoothing = 0.1f;
     public float speed = 7f;
     public float rotationSpeed = 10f;
+    [Range(0f, 1f)] public float inputSmoothing = 0.1f;
 
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private ItemPickUp itemPickUp; 
+    [SerializeField] private ItemPickUp itemPickUp;
+
+    // ? Shared direction for pickup/throw
+    public NetworkVariable<Vector3> MoveDirection =
+        new NetworkVariable<Vector3>(Vector3.zero);
 
     private Vector2 _move;
     private Vector2 _smoothedMove;
 
     private void FixedUpdate()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
+
         _smoothedMove = Vector2.Lerp(_smoothedMove, _move, inputSmoothing);
         MovePlayer();
     }
 
+    // ?? Client input
     public void OnMove(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
-        _move = context.ReadValue<Vector2>();
+
+        Vector2 input = context.ReadValue<Vector2>();
+        SendMoveServerRpc(input);
     }
 
-    public void SetInput(Vector2 input)
+    // ?? Send input to server
+    [ServerRpc(RequireOwnership = false)]
+    private void SendMoveServerRpc(Vector2 input)
     {
-        if (!IsOwner) return;
         _move = input;
     }
 
     private void MovePlayer()
     {
         Vector3 movement = new Vector3(_smoothedMove.x, 0f, _smoothedMove.y);
-        if (movement.magnitude < 0.01f) return;
 
-        Quaternion targetRotation = Quaternion.LookRotation(movement);
-        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
+        if (movement.sqrMagnitude < 0.001f)
+            movement = Vector3.zero;
+
+        if (movement != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+
+            rb.MoveRotation(Quaternion.Slerp(
+                rb.rotation,
+                targetRotation,
+                rotationSpeed * Time.fixedDeltaTime
+            ));
+        }
+
         rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
 
-        itemPickUp.Direction = movement.normalized;
+        // ? THIS is now synced correctly
+        MoveDirection.Value = movement;
     }
 }

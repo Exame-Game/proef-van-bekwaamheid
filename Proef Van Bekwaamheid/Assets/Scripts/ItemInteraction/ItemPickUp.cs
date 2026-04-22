@@ -4,194 +4,164 @@ using UnityEngine.InputSystem;
 
 public class ItemPickUp : NetworkBehaviour
 {
-    public Vector3 Direction { get; set; }
-
     [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private Transform PickUpPoint;
-    [SerializeField] private LayerMask PickUpLayer;
+    [SerializeField] private Transform pickUpPoint;
+    [SerializeField] private LayerMask pickUpLayer;
 
     [SerializeField] private float throwForce = 10f;
     [SerializeField] private float throwHoldTime = 0.3f;
     [SerializeField] private float pickUpRange = 2f;
-    [SerializeField] private float pickUpOffset;
+    [SerializeField] private float pickUpOffset = 1f;
 
-    private GameObject itemHolding;
     private InputAction interactAction;
-    private float holdTime;
-    private bool justPickedUp;
+
+    private enum PickUpState { Empty, WaitingForRelease, Holding }
+    private PickUpState state = PickUpState.Empty;
+    private float holdTime = 0f;
+
+    private NetworkVariable<bool> isHolding = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+    private NetworkObject heldItem;
 
     private void Awake()
     {
         interactAction = inputActions.FindAction("PickUp");
     }
 
-    void Update()
+    private void Update()
     {
         if (!IsOwner) return;
 
-        if (interactAction.WasPressedThisFrame())
-            OnInteractPressed();
-
-        if (interactAction.IsPressed() && itemHolding && !justPickedUp)
-            holdTime += Time.deltaTime;
-
-        if (interactAction.WasReleasedThisFrame())
-            OnInteractReleased();
-    }
-
-    void FixedUpdate()
-    {
-        if (!IsOwner) return;
-
-        if (itemHolding && itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
+        switch (state)
         {
-            rb.MovePosition(PickUpPoint.position);
-            rb.MoveRotation(PickUpPoint.rotation);
+            case PickUpState.Empty:
+                if (interactAction.WasPressedThisFrame())
+                {
+                    TryPickUpServerRpc();
+                    state = PickUpState.WaitingForRelease;
+                }
+                break;
+
+            case PickUpState.WaitingForRelease:
+                if (interactAction.WasReleasedThisFrame())
+                {
+                    state = PickUpState.Holding;
+                }
+                break;
+
+            case PickUpState.Holding:
+                if (interactAction.IsPressed())
+                {
+                    holdTime += Time.deltaTime;
+                }
+
+                if (interactAction.WasReleasedThisFrame())
+                {
+                    if (holdTime >= throwHoldTime)
+                        ReleaseItemServerRpc(holdTime);
+                    else
+                        ReleaseItemServerRpc(0f);
+
+                    state = PickUpState.Empty;
+                    holdTime = 0f;
+                }
+                break;
         }
     }
 
-    private void OnInteractPressed()
+    private void FixedUpdate()
     {
-        holdTime = 0f;
+        if (!IsServer) return;
 
-        if (itemHolding && !justPickedUp)
-            return;
-
-        if (!itemHolding)
-            TryPickUp();
+        if (heldItem != null)
+        {
+            heldItem.transform.position = pickUpPoint.position;
+            heldItem.transform.rotation = pickUpPoint.rotation;
+        }
     }
 
-    private void OnInteractReleased()
+    [ServerRpc(RequireOwnership = false)]
+    private void TryPickUpServerRpc(ServerRpcParams rpcParams = default)
     {
-        if (justPickedUp)
+        if (heldItem != null) return;
+
+        Vector3 center = transform.position + transform.forward * pickUpOffset;
+        Collider[] hits = Physics.OverlapSphere(center, pickUpRange, pickUpLayer);
+
+        if (hits.Length == 0) return;
+
+        NetworkObject best = null;
+        float closest = Mathf.Infinity;
+
+        foreach (var hit in hits)
         {
-            justPickedUp = false;
-            holdTime = 0f;
-            return;
+            NetworkObject netObj = hit.GetComponentInParent<NetworkObject>();
+            if (netObj == null) continue;
+
+            float dist = Vector3.Distance(transform.position, netObj.transform.position);
+            if (dist < closest)
+            {
+                closest = dist;
+                best = netObj;
+            }
         }
 
-        if (itemHolding)
+        if (best == null) return;
+
+        heldItem = best;
+        isHolding.Value = true;
+        SetHeldState(best, true);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ReleaseItemServerRpc(float holdTime)
+    {
+        if (heldItem == null) return;
+
+        Vector3 dir = transform.forward;
+        bool shouldThrow = holdTime >= throwHoldTime;
+
+        Rigidbody rb = heldItem.GetComponent<Rigidbody>();
+        Collider col = heldItem.GetComponent<Collider>();
+
+        heldItem.transform.position = pickUpPoint.position + dir * 0.5f;
+
+        if (rb != null)
         {
-            if (holdTime >= throwHoldTime)
-                ThrowItem();
-            else
-                DropItem();
+            rb.isKinematic = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.useGravity = true;
+
+            if (shouldThrow)
+                rb.AddForce(dir.normalized * throwForce, ForceMode.Impulse);
         }
 
-        holdTime = 0f;
-    }
-
-    private void TryPickUp()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position + Direction * pickUpOffset, pickUpRange, PickUpLayer);
-        if (colliders.Length > 0 && PickUpPoint.childCount == 0)
-            PickUpItem(colliders[0].gameObject);
-    }
-
-    private void PickUpItem(GameObject item)
-    {
-        itemHolding = item;
-        justPickedUp = true;
-
-        if (itemHolding.TryGetComponent<NetworkObject>(out NetworkObject netObj))
-            RequestOwnershipServerRpc(netObj.NetworkObjectId);
-
-        if (itemHolding.TryGetComponent<Rigidbody>(out Rigidbody rb))
-        {
-            rb.linearVelocity = Vector3.zero;   // zero BEFORE
-            rb.angularVelocity = Vector3.zero;  // setting kinematic
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            rb.position = PickUpPoint.position;
-            rb.rotation = PickUpPoint.rotation;
-            rb.Sleep();
-        }
-
-        if (itemHolding.TryGetComponent<Collider>(out Collider col))
-            col.enabled = false;
-    }
-
-    private void DropItem()
-    {
-        if (itemHolding.TryGetComponent<NetworkObject>(out NetworkObject netObj))
-            DropItemServerRpc(netObj.NetworkObjectId, transform.position + Direction);
-
-        if (itemHolding.TryGetComponent<Collider>(out Collider col))
+        if (col != null)
             col.enabled = true;
 
-        itemHolding = null;
+        isHolding.Value = false;
+        heldItem = null;
     }
 
-    private void ThrowItem()
+    private void SetHeldState(NetworkObject netObj, bool isHeld)
     {
-        if (itemHolding.TryGetComponent<NetworkObject>(out NetworkObject netObj))
-            ThrowItemServerRpc(netObj.NetworkObjectId, transform.position + Direction, Direction);
+        Rigidbody rb = netObj.GetComponent<Rigidbody>();
+        Collider col = netObj.GetComponent<Collider>();
 
-        if (itemHolding.TryGetComponent<Collider>(out Collider col))
-            col.enabled = true;
-
-        itemHolding = null;
-    }
-
-    [ServerRpc]
-    private void DropItemServerRpc(ulong networkObjectId, Vector3 dropPosition)
-    {
-        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+        if (rb != null)
         {
-            netObj.RemoveOwnership();
-
-            if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
-            {
-                rb.isKinematic = false;
-                rb.useGravity = true;
-                rb.position = dropPosition;
-            }
-
-            if (netObj.TryGetComponent<Collider>(out Collider col))
-                col.enabled = true;
+            rb.isKinematic = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = isHeld;
+            rb.useGravity = !isHeld;
         }
+        if (col != null) col.enabled = !isHeld;
     }
 
-    [ServerRpc]
-    private void ThrowItemServerRpc(ulong networkObjectId, Vector3 dropPosition, Vector3 throwDirection)
-    {
-        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
-        {
-            netObj.RemoveOwnership();
-
-            if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
-            {
-                rb.isKinematic = false;
-                rb.useGravity = true;
-                rb.position = dropPosition;
-                rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
-            }
-
-            if (netObj.TryGetComponent<Collider>(out Collider col))
-                col.enabled = true;
-        }
-    }
-
-    [ServerRpc]
-    private void RequestOwnershipServerRpc(ulong networkObjectId)
-    {
-        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
-            netObj.ChangeOwnership(OwnerClientId);
-    }
-
-    [ServerRpc]
-    private void ReleaseOwnershipServerRpc(ulong networkObjectId)
-    {
-        if (NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
-            netObj.RemoveOwnership();
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position + Direction * pickUpOffset, pickUpRange);
-    }
-
-    void OnEnable() { interactAction.Enable(); }
-    void OnDisable() { interactAction.Disable(); }
+    private void OnEnable() => interactAction.Enable();
+    private void OnDisable() => interactAction.Disable();
 }
