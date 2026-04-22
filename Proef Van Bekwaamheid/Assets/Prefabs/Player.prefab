@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3002671991
+  GlobalObjectIdHash: 903098723
   InScenePlacedSourceGlobalObjectIdHash: 903098723
   DeferredDespawnTick: 0
   Ownership: 1
@@ -436,15 +436,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPickUp
   ShowTopMostFoldoutHeaderGroup: 1
-  inputActions: {fileID: -944628639613478452, guid: 8c966f1f1efd5734d84e7acfa936cd34, type: 3}
-  pickUpPoint: {fileID: 7655654540562386725}
-  pickUpLayer:
+  _inputActions: {fileID: -944628639613478452, guid: 8c966f1f1efd5734d84e7acfa936cd34, type: 3}
+  _pickUpPoint: {fileID: 7655654540562386725}
+  _pickUpLayer:
     serializedVersion: 2
     m_Bits: 8
-  throwForce: 10
-  throwHoldTime: 0.3
-  pickUpRange: 2
-  pickUpOffset: 1
+  _throwForce: 10
+  _throwHoldTime: 0.3
+  _pickUpRange: 2
+  _pickUpOffset: 1
 --- !u!1001 &4051160784766807814
 PrefabInstance:
   m_ObjectHideFlags: 0
