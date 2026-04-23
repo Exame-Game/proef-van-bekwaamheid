@@ -4,42 +4,26 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
-    public float speed = 7f;
-    public float rotationSpeed = 10f;
-    [Range(0f, 1f)] public float inputSmoothing = 0.1f;
-
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private ItemPickUp itemPickUp;
-
-    // ? Shared direction for pickup/throw
+    [SerializeField] private Rigidbody _rb;
+    [SerializeField] private ItemPickUp _itemPickUp;
+    
     public NetworkVariable<Vector3> MoveDirection =
         new NetworkVariable<Vector3>(Vector3.zero);
+
+    public float Speed = 7f;
+    public float RotationSpeed = 10f;
+    [Range(0f, 1f)] public float InputSmoothing = 0.1f;
 
     private Vector2 _move;
     private Vector2 _smoothedMove;
 
     private void FixedUpdate()
     {
-        if (!IsServer) return;
+        if (!IsServer) 
+            return;
 
-        _smoothedMove = Vector2.Lerp(_smoothedMove, _move, inputSmoothing);
+        _smoothedMove = Vector2.Lerp(_smoothedMove, _move, InputSmoothing);
         MovePlayer();
-    }
-
-    // ?? Client input
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        if (!IsOwner) return;
-
-        Vector2 input = context.ReadValue<Vector2>();
-        SendMoveServerRpc(input);
-    }
-
-    // ?? Send input to server
-    [ServerRpc(RequireOwnership = false)]
-    private void SendMoveServerRpc(Vector2 input)
-    {
-        _move = input;
     }
 
     private void MovePlayer()
@@ -53,16 +37,30 @@ public class PlayerController : NetworkBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(movement);
 
-            rb.MoveRotation(Quaternion.Slerp(
-                rb.rotation,
+            _rb.MoveRotation(Quaternion.Slerp(
+                _rb.rotation,
                 targetRotation,
-                rotationSpeed * Time.fixedDeltaTime
+                RotationSpeed * Time.fixedDeltaTime
             ));
         }
 
-        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+        _rb.MovePosition(_rb.position + movement * Speed * Time.fixedDeltaTime);
 
-        // ? THIS is now synced correctly
         MoveDirection.Value = movement;
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        if (!IsOwner) 
+            return;
+
+        Vector2 input = context.ReadValue<Vector2>();
+        SendMoveServerRpc(input);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendMoveServerRpc(Vector2 input)
+    {
+        _move = input;
     }
 }

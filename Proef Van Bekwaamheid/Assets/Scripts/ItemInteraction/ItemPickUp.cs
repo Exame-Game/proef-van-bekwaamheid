@@ -18,7 +18,7 @@ public class ItemPickUp : NetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
 
-    // Server-only — never assign or read this on a client
+    // Host-only!! never assign or read this on a client
     private NetworkObject _heldItem;
 
     private InputAction _interactAction;
@@ -140,7 +140,6 @@ public class ItemPickUp : NetworkBehaviour
         Rigidbody rb = _heldItem.GetComponent<Rigidbody>();
         Collider col = _heldItem.GetComponent<Collider>();
 
-        // Nudge the item forward slightly so it doesn't overlap the player collider on release
         _heldItem.transform.position = _pickUpPoint.position + dir * 0.5f;
 
         if (rb != null)
