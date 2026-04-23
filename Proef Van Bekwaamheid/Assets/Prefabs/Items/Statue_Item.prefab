@@ -178,6 +178,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4249455936433362253}
     m_Modifications:
+    - target: {fileID: 2804918056098487764, guid: c52ec57a280443141ae40c9eb7460042, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 81d791a35abd87f42918aba10bd538dc, type: 2}
     - target: {fileID: 4797513222515625184, guid: c52ec57a280443141ae40c9eb7460042, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -222,6 +226,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prefab_statue_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8799693041392991684, guid: c52ec57a280443141ae40c9eb7460042, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 81d791a35abd87f42918aba10bd538dc, type: 2}
     m_RemovedComponents:
     - {fileID: 6592686013857329911, guid: c52ec57a280443141ae40c9eb7460042, type: 3}
     m_RemovedGameObjects: []

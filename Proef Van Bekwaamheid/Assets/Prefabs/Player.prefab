@@ -382,16 +382,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
-  speed: 10
-  rotationSpeed: 15
-  inputSmoothing: 0.95
-  rb: {fileID: 4003042468206252743}
-  itemPickUp: {fileID: 7814399446297699552}
+  _rb: {fileID: 4003042468206252743}
+  _itemPickUp: {fileID: 7814399446297699552}
   MoveDirection:
     UpdateTraits:
       MinSecondsBetweenUpdates: 0
       MaxSecondsBetweenUpdates: 0
     m_InternalValue: {x: 0, y: 0, z: 0}
+  Speed: 10
+  RotationSpeed: 15
+  InputSmoothing: 0.95
 --- !u!114 &-5258948914828406012
 MonoBehaviour:
   m_ObjectHideFlags: 0
