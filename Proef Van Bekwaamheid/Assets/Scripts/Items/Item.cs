@@ -5,13 +5,13 @@ public class Item : MonoBehaviour
     [SerializeField] private ItemSO _itemSO;
 
     public BoxCollider Collider;
+    public ItemData data;
 
-    private ItemData _data;
     private GameObject _prefab;
 
     private void Awake()
     {
-        _data = new ItemData(_itemSO);
+        data = new ItemData(_itemSO);
         _prefab = _itemSO.Prefab;
     }
 }
