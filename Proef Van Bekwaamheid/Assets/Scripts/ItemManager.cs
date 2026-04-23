@@ -1,26 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
-public class ItemManager : MonoBehaviour
-{
-    [SerializeField] private List<Item> _items = new List<Item>();
-    [SerializeField] private GameObject[] _spawnPoints;
-    [SerializeField] private GameObject _itemParent;
+using Unity.Netcode;
 
+public class ItemSpawner : MonoBehaviour
+{
+    [SerializeField] private GameObject[] _spawnPoints;
     [SerializeField] private LayerMask _itemLayer;
     [SerializeField] private LayerMask _groundLayer;
 
     [SerializeField] private int _maxItems = 10;
 
-    public List<ItemSO> AvaliableItems;
+    public List<ItemSO> AvailableItems;
 
     private int _currentItems = 0;
 
-    public void Start()
+    private void Start()
     {
-        InstantiateAndSpawnItems();
+        if (!NetworkManager.Singleton.IsServer) 
+            return;
+
+        SpawnItems();
     }
 
-    private void InstantiateAndSpawnItems()
+    private void SpawnItems()
     {
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
@@ -31,62 +33,61 @@ public class ItemManager : MonoBehaviour
             if (spawnPoint == null)
                 continue;
 
-            Collider[] colliders = Physics.OverlapSphere(spawnPoint.transform.position, 0.5f, _itemLayer);
-            if (colliders.Length > 0)
+            Collider[] hits = Physics.OverlapSphere(spawnPoint.transform.position, 0.5f, _itemLayer);
+            if (hits.Length > 0)
                 continue;
 
-            int randomIndex = Random.Range(0, AvaliableItems.Count);
-            GameObject itemPrefab = AvaliableItems[randomIndex].Prefab;
-            if (itemPrefab == null)
+            int randomIndex = Random.Range(0, AvailableItems.Count);
+            GameObject prefab = AvailableItems[randomIndex].Prefab;
+
+            if (prefab == null)
                 continue;
 
             Ray ray = new Ray(spawnPoint.transform.position, Vector3.down);
-            Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red, 100);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 10f, _groundLayer))
             {
-                if (((1 << hit.collider.gameObject.layer) & _groundLayer.value) == 0)
-                    continue;
-                
-                GameObject newItem = Instantiate(itemPrefab, hit.point, spawnPoint.transform.rotation);
-                Item spawnedItem = newItem.GetComponent<Item>();
-                float halfHeight = spawnedItem.Collider.bounds.extents.y;
-                newItem.transform.position = hit.point + Vector3.up * halfHeight;
-                AddItem(spawnedItem);
+                GameObject obj = Instantiate(prefab, hit.point, Quaternion.identity);
+
+                NetworkObject netObj = obj.GetComponent<NetworkObject>();
+                if (netObj != null)
+                    netObj.Spawn();
+
+                Item item = obj.GetComponent<Item>();
+
+                if (item != null && item.Collider != null)
+                {
+                    float halfHeight = item.Collider.bounds.extents.y;
+                    obj.transform.position = hit.point + Vector3.up * halfHeight;
+                }
+
+                _currentItems++;
             }
         }
     }
 
     public void ResetItems()
     {
-        foreach (Item item in _items)
-        {
-            if (item != null)
-                Destroy(item.gameObject);
-        }
-
-        _items.Clear();
-        _currentItems = 0;
-        InstantiateAndSpawnItems();
-    }
-
-    public void AddItem(Item item)
-    {
-        if (_currentItems >= _maxItems)
+        if (!NetworkManager.Singleton.IsServer) 
             return;
 
-        _items.Add(item);
-        item.transform.parent = _itemParent.transform;
-        _currentItems++;
-    }
+        Item[] items = FindObjectsOfType<Item>();
 
-    public void RemoveItem(Item item)
-    {
-        if (_items.Contains(item))
+        foreach (Item item in items)
         {
-            _items.Remove(item);
-            item.transform.parent = null;
-            _currentItems--;
+            if (item == null) 
+                continue;
+
+            NetworkObject netObj = item.GetComponent<NetworkObject>();
+
+            if (netObj != null && netObj.IsSpawned)
+                netObj.Despawn();
+
+            Destroy(item.gameObject);
         }
+
+        _currentItems = 0;
+
+        SpawnItems();
     }
 }

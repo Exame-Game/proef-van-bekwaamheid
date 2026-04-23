@@ -8,16 +8,19 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MenuScene.unity
     guid: 6ce7e2386c105304daa16c8ba42fbf2c
-  - enabled: 1
-
-    path: Assets/Scenes/HostScene.unity
-    guid: d5e1ee646a9f962459979d18248fb1c4
   - enabled: 0
     path: Assets/Scenes/ClientScene.unity
     guid: 4173cafb517e5ce46853bd0b5155002e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Development/TestScene Player Movement/PlayerMovement.unity
     guid: b32578843c287214f810e2446a1b19bf
+  - enabled: 0
+    path: Assets/Scenes/Development/TestScene Feature Item Interaction/ItemInteractionTest
+      -old.unity
+    guid: 2ed5ee169b9a55c4c9f1d76d74b8face
+  - enabled: 1
+    path: Assets/Scenes/Development/TestScene Feature Item Interaction/ItemInteractionNew.unity
+    guid: 94e3e98e86948654e82bac2612eefceb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
