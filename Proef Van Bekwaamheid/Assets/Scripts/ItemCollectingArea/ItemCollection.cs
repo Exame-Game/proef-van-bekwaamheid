@@ -1,22 +1,44 @@
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ItemCollection : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _inventoryText;
+
     private Collider _collider;
-    [SerializeField] private InventoryData _inventoryData;
+    private InventoryData _inventoryData;
 
     private void Start()
     {
         _collider = GetComponent<Collider>();
+        _inventoryData = new InventoryData();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("PickUp"))
-        {
-            _inventoryData.AddItem(other.gameObject.GetComponent<ItemData>());
+        if (other.gameObject.layer != LayerMask.NameToLayer("PickUp")) 
+            return;
 
-            Debug.Log(_inventoryData.ItemsByRarity.Values);
+        _inventoryData.AddItem(other.gameObject.GetComponent<Item>().data);
+        UpdateInventoryText();
+    }
+
+    private void UpdateInventoryText()
+    {
+        string text = "";
+
+        foreach (KeyValuePair<Rarity, List<ItemData>> entry in _inventoryData.ItemsByRarity.OrderBy(kvp => (int)kvp.Key))
+        {
+            text += $"<b>{entry.Key}</b>\n";
+
+            foreach (ItemData item in entry.Value)
+                text += $"  {item.Name}\n";
+
+            text += "\n";
         }
+
+        _inventoryText.text = text;
     }
 }
