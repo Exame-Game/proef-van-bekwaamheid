@@ -48,13 +48,13 @@ public class QRCodeScanner : MonoBehaviour
 
         if (Application.HasUserAuthorization(UserAuthorization.WebCam))
         {
-            Debug.Log("<color=green>[QRCodeScanner] Camera toestemming verleend, wachten op camera...</color>");
+            Debug.Log("<color=green>[QRCodeScanner] Camera permission granted, waiting for camera...</color>");
 
             yield return StartCoroutine(WaitForCamera());
         }
         else
         {
-            Debug.LogWarning("<color=orange>[QRCodeScanner] Camera toestemming geweigerd.</color>");
+            Debug.LogWarning("<color=orange>[QRCodeScanner] Camera permission denied.</color>");
             _isCamAvailable = false;
             UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
         }
@@ -69,17 +69,17 @@ public class QRCodeScanner : MonoBehaviour
         {
             if (WebCamTexture.devices.Length > 0)
             {
-                Debug.Log($"<color=green>[QRCodeScanner] Camera gevonden na {elapsed:F1}s.</color>");
+                Debug.Log($"<color=green>[QRCodeScanner] Camera found after {elapsed:F1}s.</color>");
                 SetUpCamera();
                 yield break;
             }
 
-            Debug.Log("<color=yellow>[QRCodeScanner] Nog geen camera beschikbaar, opnieuw proberen...</color>");
+            Debug.Log("<color=yellow>[QRCodeScanner] No camera available yet, retrying...</color>");
             yield return new WaitForSeconds(0.5f);
             elapsed += 0.5f;
         }
 
-        Debug.LogWarning("<color=orange>[QRCodeScanner] Timeout: geen camera gevonden na toestemming.</color>");
+        Debug.LogWarning("<color=orange>[QRCodeScanner] Timeout: no camera found after permission granted.</color>");
         _isCamAvailable = false;
         UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
     }
@@ -94,7 +94,7 @@ public class QRCodeScanner : MonoBehaviour
     {
         if (!_isCamAvailable || _camTexture == null || !_camTexture.isPlaying)
         {
-            Debug.LogWarning("<color=orange>[QRCodeScanner] Scan aangeroepen maar camera is nog niet beschikbaar.</color>");
+            Debug.LogWarning("<color=orange>[QRCodeScanner] Scan called but camera is not yet available.</color>");
             return;
         }
 
@@ -105,7 +105,7 @@ public class QRCodeScanner : MonoBehaviour
 
             if (result != null)
             {
-                Debug.Log($"<color=green>[QRCodeScanner] QR code gedetecteerd: \"{result.Text}\"</color>");
+                Debug.Log($"<color=green>[QRCodeScanner] QR code detected: \"{result.Text}\"</color>");
                 _textOut.text = result.Text;
                 decodedIPAddress = result.Text;
 
@@ -117,20 +117,19 @@ public class QRCodeScanner : MonoBehaviour
             }
             else
             {
-                _textOut.text = "Geen QR code gedetecteerd.";
-                Debug.Log("<color=yellow>[QRCodeScanner] Geen QR code in huidig frame.</color>");
+                _textOut.text = "No QR Code detected.";
             }
         }
         catch (Exception ex)
         {
-            Debug.LogError($"<color=red>[QRCodeScanner] Fout tijdens scannen: {ex.Message}</color>");
-            _textOut.text = "Fout bij scannen van QR code.";
+            _textOut.text = "Error scanning QR code.";
         }
     }
 
     private void UpdateCameraRender()
     {
-        if (!_isCamAvailable) return;
+        if (!_isCamAvailable) 
+            return;
 
         float ratio = (float)_camTexture.width / _camTexture.height;
         _aspectRatioFitter.aspectRatio = ratio;
@@ -143,9 +142,10 @@ public class QRCodeScanner : MonoBehaviour
         WebCamDevice[] devices = WebCamTexture.devices;
         if (devices.Length == 0)
         {
-            Debug.LogWarning("<color=orange>[QRCodeScanner] Geen camera gevonden.</color>");
+            Debug.LogWarning("<color=orange>[QRCodeScanner] No camera found.</color>");
             _isCamAvailable = false;
             UIManager.Instance.SetClientUIState(ClientUIState.ManualConnection);
+
             return;
         }
 
@@ -165,7 +165,7 @@ public class QRCodeScanner : MonoBehaviour
         _rawImagebackground.texture = _camTexture;
         _isCamAvailable = true;
 
-        Debug.Log($"<color=cyan>[QRCodeScanner] Camera gestart: {selectedDevice.name} at {width}x{height}</color>");
+        Debug.Log($"<color=cyan>[QRCodeScanner] Camera started: {selectedDevice.name} at {width}x{height}</color>");
     }
 
     private bool ValidateIPv4(string ipString)
