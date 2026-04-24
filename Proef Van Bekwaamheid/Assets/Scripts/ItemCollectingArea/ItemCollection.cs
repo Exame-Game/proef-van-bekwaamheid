@@ -6,13 +6,12 @@ using UnityEngine;
 public class ItemCollection : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _inventoryText;
+    [SerializeField] private Collider _collider;
 
-    private Collider _collider;
     private InventoryData _inventoryData;
 
     private void Start()
     {
-        _collider = GetComponent<Collider>();
         _inventoryData = new InventoryData();
     }
 
