@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private Rigidbody _rb;
-    [SerializeField] private ItemPickUp _itemPickUp;
+    //[SerializeField] private ItemPickUp _itemPickUp;
     
     public NetworkVariable<Vector3> MoveDirection =
         new NetworkVariable<Vector3>(Vector3.zero);
