@@ -70,13 +70,8 @@ public class ConnectionManager : MonoBehaviour
 
     public void StartHost()
     {
-        NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
-
-        if (NetworkManager.Singleton.LocalClient.PlayerObject != null)
-            NetworkManager.Singleton.LocalClient.PlayerObject.Despawn(true);
-
         QRCodeGenerator.GenerateQRCode(GetLocalIPAddress());
     }
 
@@ -133,7 +128,7 @@ public class ConnectionManager : MonoBehaviour
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
         response.Approved = true;
-        response.CreatePlayerObject = request.ClientNetworkId != NetworkManager.ServerClientId;
+        response.CreatePlayerObject = false;
     }
 
     private void OnClientDisconnected(ulong clientId)
