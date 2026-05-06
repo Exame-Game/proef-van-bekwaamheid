@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 public class InventoryData
 {
-    private static InventoryData _instance;
+    private static InventoryData s_Instance;
+
     private Dictionary<Rarity, List<ItemData>> _itemsByRarity;
+
+    public event Action OnItemAdded;
 
     public Dictionary<Rarity, List<ItemData>> ItemsByRarity => _itemsByRarity;
 
@@ -12,9 +16,10 @@ public class InventoryData
     {
         get
         {
-            if (_instance == null)
-                _instance = new InventoryData();
-            return _instance;
+            if (s_Instance == null)
+                s_Instance = new InventoryData();
+
+            return s_Instance;
         }
     }
 
@@ -22,26 +27,26 @@ public class InventoryData
     {
         _itemsByRarity = new Dictionary<Rarity, List<ItemData>>();
 
-        // Initialize dictionary with all rarity types
-        foreach (Rarity rarity in System.Enum.GetValues(typeof(Rarity)))
-        {
+        foreach (Rarity rarity in Enum.GetValues(typeof(Rarity)))
             _itemsByRarity[rarity] = new List<ItemData>();
-        }
     }
 
     public void AddItem(ItemData item)
     {
-        if (item == null) return;
+        if (item == null)
+            return;
 
         if (!_itemsByRarity.ContainsKey(item.Rarity))
             _itemsByRarity[item.Rarity] = new List<ItemData>();
 
         _itemsByRarity[item.Rarity].Add(item);
+        OnItemAdded?.Invoke();
     }
 
     public void RemoveItem(ItemData item)
     {
-        if (item == null) return;
+        if (item == null)
+            return;
 
         if (_itemsByRarity.ContainsKey(item.Rarity))
             _itemsByRarity[item.Rarity].Remove(item);
