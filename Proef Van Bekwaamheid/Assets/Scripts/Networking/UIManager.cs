@@ -12,10 +12,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private HostUIState initialHostState = HostUIState.Lobby;
 
     [Header("Client UI Panels")]
+    [SerializeField] private GameObject ClientMenuUI;
     [SerializeField] private GameObject ClientQRScannerUI;
     [SerializeField] private GameObject ClientManualConnectionUI;
     [SerializeField] private GameObject ClientDisconnectUI;
     [SerializeField] private GameObject ClientControllerUI;
+    [SerializeField] private GameObject ClientSettingsUI;
+    [SerializeField] private GameObject ClientControlSettingsUI;
 
     [Header("Host UI Panels")]
     [SerializeField] private GameObject HostLobbyUI;
@@ -32,6 +35,7 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
+
         DontDestroyOnLoad(gameObject);
     }
 
@@ -49,10 +53,13 @@ public class UIManager : MonoBehaviour
 
     public void SetClientUIState(ClientUIState state)
     {
+        ClientMenuUI.SetActive(state == ClientUIState.Menu);
         ClientQRScannerUI.SetActive(state == ClientUIState.QRScanner);
         ClientManualConnectionUI.SetActive(state == ClientUIState.ManualConnection);
         ClientDisconnectUI.SetActive(state == ClientUIState.Disconnect);
         ClientControllerUI.SetActive(state == ClientUIState.Controller);
+        ClientSettingsUI.SetActive(state == ClientUIState.Settings);
+        ClientControlSettingsUI.SetActive(state == ClientUIState.ControlSettings);
     }
 
     public void SetClientUIStateFromInt(int stateIndex)
@@ -68,10 +75,13 @@ public class UIManager : MonoBehaviour
 
 public enum ClientUIState
 {
-    QRScanner,
-    ManualConnection,
-    Disconnect,
-    Controller
+    Menu = 0,
+    QRScanner = 1,
+    ManualConnection = 2,
+    Disconnect = 3,
+    Controller = 4,
+    Settings = 5,
+    ControlSettings = 6
 }
 
 public enum HostUIState
