@@ -10662,6 +10662,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Log Items '
       objectReference: {fileID: 0}
+    - target: {fileID: 5072244796019627619, guid: 9cb9066ddcd10064b99046c8d6796945, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6898278033526363406, guid: 9cb9066ddcd10064b99046c8d6796945, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
