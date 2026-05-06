@@ -8,13 +8,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PickUp
   - Water
   - UI
   - Walls
-  - 
-  - 
-  - 
+  - Item
+  - Ground
+  - Player
   - 
   - 
   - 

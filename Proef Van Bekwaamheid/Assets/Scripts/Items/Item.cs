@@ -3,6 +3,9 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     [SerializeField] private ItemSO _itemSO;
+
+    public BoxCollider Collider;
+
     private ItemData _data;
     private GameObject _prefab;
 

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbf8be7858411974682b46f975c82f89, type: 3}
-  m_Name: SO_Strawberry
+  m_Name: Item
   m_EditorClassIdentifier: Assembly-CSharp::ItemSO
-  Rarity: 1
+  Rarity: 0
   Prefab: {fileID: 0}
-  Name: Strawberry
-  Value: 10
-  Weight: 1
+  Value: 0
+  Weight: 0
+  Name: 
