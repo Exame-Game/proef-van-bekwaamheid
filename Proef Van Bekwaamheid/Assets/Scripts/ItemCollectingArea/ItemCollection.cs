@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -8,6 +10,8 @@ public class ItemCollection : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _inventoryText;
     [SerializeField] private Collider _collider;
 
+    [SerializeField]private DOTweenAnimation _tween;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer != LayerMask.NameToLayer("PickUp"))
@@ -15,6 +19,8 @@ public class ItemCollection : MonoBehaviour
 
         InventoryData.Instance.AddItem(other.gameObject.GetComponent<Item>().data);
         UpdateInventoryText();
+        _tween = other.gameObject.GetComponent<DOTweenAnimation>();
+        StartCoroutine(Tween());
         Destroy(other.gameObject.GetComponent<Item>());
     }
 
@@ -32,5 +38,11 @@ public class ItemCollection : MonoBehaviour
             text += "\n";
         }
         _inventoryText.text = text;
+    }
+    private IEnumerator Tween()
+    {
+        _tween.DOPlay();
+        yield return new WaitForSeconds(_tween.duration);
+
     }
 }
