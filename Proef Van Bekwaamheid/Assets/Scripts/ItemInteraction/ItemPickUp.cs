@@ -1,9 +1,12 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class ItemPickUp : NetworkBehaviour
 {
+    [SerializeField] private UnityEvent _onGrab;
+    [SerializeField] private UnityEvent _onRelease;
     [SerializeField] private InputActionAsset _inputActions;
     [SerializeField] private Transform _pickUpPoint;
     [SerializeField] private LayerMask _pickUpLayer;
@@ -158,6 +161,8 @@ public class ItemPickUp : NetworkBehaviour
 
         _isHolding.Value = false;
         _heldItem = null;
+
+        _onRelease.Invoke();
     }
 
     /// <summary>
@@ -179,6 +184,8 @@ public class ItemPickUp : NetworkBehaviour
 
         if (col != null)
             col.enabled = !isHeld;
+
+        _onGrab.Invoke();
     }
 
     private enum PickUpState
