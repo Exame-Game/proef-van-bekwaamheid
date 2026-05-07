@@ -921,7 +921,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8337142163106842754}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -950,7 +950,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da2a3e7e69a5b944997a6df73963fc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
-  _items: []
   _spawnPoints:
   - {fileID: 8941931572975627081}
   - {fileID: 4672626070616903795}
@@ -962,19 +961,21 @@ MonoBehaviour:
   - {fileID: 2041136547853944230}
   - {fileID: 2183827316130016201}
   - {fileID: 3371224566035070481}
-  _itemParent: {fileID: 0}
   _itemLayer:
     serializedVersion: 2
     m_Bits: 128
   _groundLayer:
     serializedVersion: 2
     m_Bits: 256
-  _maxItems: 10
-  AvaliableItems:
+  _maxItems: 8
+  AvailableItems:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 32aa26e0f0ae2e44091de4eca1185420, type: 2}
   - {fileID: 11400000, guid: 9799737c0d8c4004a81fb0dfd85fd367, type: 2}
+  - {fileID: 11400000, guid: 90fe4e53b9ae9ba4d9de23656bf48dab, type: 2}
   - {fileID: 11400000, guid: 15587f19df66774448c057c5372c0d01, type: 2}
+  - {fileID: 11400000, guid: 070d17cdd7a3a5840842e2079f28b51a, type: 2}
   - {fileID: 11400000, guid: 7129155e148df6e408b6b36ab1f1a008, type: 2}
-  - {fileID: 11400000, guid: c6cffdc7c172d1547b58338c0e0a3b5e, type: 2}
   - {fileID: 11400000, guid: df280937086025648b27517b0adfad2d, type: 2}
 --- !u!1 &8941931572975627081
 GameObject:
