@@ -71,8 +71,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.1224356, y: 0.16477323, z: 1}
-  m_Center: {x: -0.038979053, y: 0.046503544, z: 0}
+  m_Size: {x: 2.2750235, y: 0.24038482, z: 0.8900604}
+  m_Center: {x: -0.01718092, y: 0.019691825, z: -0.054969788}
 --- !u!54 &-7534870378546836906
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 5772582141161899394, guid: a09434ac1dbd8ee489bfc54f8b087cf2, type: 3}
+  target: {fileID: 7491389339140325643}
   animationType: 5
   targetType: 11
   forcedTargetType: 0
