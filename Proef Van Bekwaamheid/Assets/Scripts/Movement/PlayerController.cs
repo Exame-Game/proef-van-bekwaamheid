@@ -5,24 +5,20 @@ using UnityEngine.InputSystem;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private Rigidbody _rb;
-    //[SerializeField] private ItemPickUp _itemPickUp;
-    
-    public NetworkVariable<Vector3> MoveDirection =
-        new NetworkVariable<Vector3>(Vector3.zero);
-
-    public float Speed = 7f;
-    public float RotationSpeed = 10f;
-    [Range(0f, 1f)] public float InputSmoothing = 0.1f;
+    [SerializeField] private float _speed = 7f;
+    [SerializeField] private float _rotationSpeed = 10f;
+    [SerializeField][Range(0f, 1f)] private float _inputSmoothing = 0.1f;
 
     private Vector2 _move;
     private Vector2 _smoothedMove;
+    public NetworkVariable<Vector3> MoveDirection = new NetworkVariable<Vector3>(Vector3.zero);
 
     private void FixedUpdate()
     {
-        if (!IsServer) 
+        if (!IsServer)
             return;
 
-        _smoothedMove = Vector2.Lerp(_smoothedMove, _move, InputSmoothing);
+        _smoothedMove = Vector2.Lerp(_smoothedMove, _move, _inputSmoothing);
         MovePlayer();
     }
 
@@ -36,22 +32,20 @@ public class PlayerController : NetworkBehaviour
         if (movement != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(movement);
-
             _rb.MoveRotation(Quaternion.Slerp(
                 _rb.rotation,
                 targetRotation,
-                RotationSpeed * Time.fixedDeltaTime
+                _rotationSpeed * Time.fixedDeltaTime
             ));
         }
 
-        _rb.MovePosition(_rb.position + movement * Speed * Time.fixedDeltaTime);
-
+        _rb.MovePosition(_rb.position + movement * _speed * Time.fixedDeltaTime);
         MoveDirection.Value = movement;
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!IsOwner) 
+        if (!IsOwner)
             return;
 
         Vector2 input = context.ReadValue<Vector2>();
