@@ -10,7 +10,7 @@ public class ItemCollection : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _inventoryText;
     [SerializeField] private Collider _collider;
 
-    [SerializeField]private DOTweenAnimation _tween;
+    [SerializeField] private DOTweenAnimation _tween;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -35,6 +35,7 @@ public class ItemCollection : MonoBehaviour
             text += $"<b>{entry.Key}</b>\n";
             foreach (ItemData item in entry.Value)
                 text += $"  {item.Name}\n";
+
             text += "\n";
         }
         _inventoryText.text = text;
@@ -43,6 +44,5 @@ public class ItemCollection : MonoBehaviour
     {
         _tween.DOPlay();
         yield return new WaitForSeconds(_tween.duration);
-
     }
 }
