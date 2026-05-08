@@ -14,12 +14,17 @@ public class ItemPickUp : NetworkBehaviour
     [SerializeField] private float _pickUpRange = 2f;
     [SerializeField] private float _pickUpOffset = 1f;
 
+    [SerializeField] private Material _highlightMaterial;
+
     private NetworkVariable<bool> _isHolding = new NetworkVariable<bool>(false,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
 
     // Host-only!! never assign or read this on a client
     private NetworkObject _heldItem;
+
+    private Renderer _currentHighlightedRenderer;
+    private Material[] _originalMaterials;
 
     private InputAction _interactAction;
     private PickUpState _state;
@@ -32,10 +37,10 @@ public class ItemPickUp : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsServer) 
+        if (!IsServer)
             return;
 
-        if (_heldItem == null) 
+        if (_heldItem == null)
             return;
 
         _heldItem.transform.position = _pickUpPoint.position;
@@ -44,7 +49,12 @@ public class ItemPickUp : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner) 
+        if (IsOwner)
+        {
+            UpdateHighlight();
+        }
+
+        if (!IsOwner)
             return;
 
         switch (_state)
@@ -84,6 +94,63 @@ public class ItemPickUp : NetworkBehaviour
     private void OnDisable()
     {
         _interactAction.Disable();
+        RemoveHighlight();
+    }
+
+    /// <summary>
+    /// Finds the closest item within range and highlights it.
+    /// </summary>
+    private void UpdateHighlight()
+    {
+        Vector3 center = transform.position + transform.forward * _pickUpOffset;
+        Collider[] hits = Physics.OverlapSphere(center, _pickUpRange, _pickUpLayer);
+
+        NetworkObject closest = null;
+        Renderer closestRenderer = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider hit in hits)
+        {
+            NetworkObject netObj = hit.GetComponentInParent<NetworkObject>();
+            if (netObj == null || netObj == _heldItem)
+                continue;
+
+            float dist = Vector3.Distance(transform.position, netObj.transform.position);
+            if (dist >= closestDistance)
+                continue;
+
+            closestDistance = dist;
+            closest = netObj;
+            closestRenderer = netObj.GetComponentInChildren<Renderer>();
+        }
+
+        // If we found a new closest item, update highlight
+        if (closestRenderer != _currentHighlightedRenderer)
+        {
+            RemoveHighlight();
+            if (closestRenderer != null)
+            {
+                _currentHighlightedRenderer = closestRenderer;
+                _originalMaterials = _currentHighlightedRenderer.materials;
+                Material[] newMaterials = new Material[_originalMaterials.Length + 1];
+                System.Array.Copy(_originalMaterials, newMaterials, _originalMaterials.Length);
+                newMaterials[newMaterials.Length - 1] = _highlightMaterial;
+                _currentHighlightedRenderer.materials = newMaterials;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removes highlight from current item and restores original materials.
+    /// </summary>
+    private void RemoveHighlight()
+    {
+        if (_currentHighlightedRenderer != null && _originalMaterials != null)
+        {
+            _currentHighlightedRenderer.materials = _originalMaterials;
+            _currentHighlightedRenderer = null;
+            _originalMaterials = null;
+        }
     }
 
     /// <summary>
@@ -93,13 +160,13 @@ public class ItemPickUp : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void TryPickUpServerRpc(ServerRpcParams rpcParams = default)
     {
-        if (_heldItem != null) 
+        if (_heldItem != null)
             return;
 
         Vector3 center = transform.position + transform.forward * _pickUpOffset;
         Collider[] hits = Physics.OverlapSphere(center, _pickUpRange, _pickUpLayer);
 
-        if (hits.Length == 0) 
+        if (hits.Length == 0)
             return;
 
         NetworkObject best = null;
@@ -108,7 +175,7 @@ public class ItemPickUp : NetworkBehaviour
         foreach (Collider hit in hits)
         {
             NetworkObject netObj = hit.GetComponentInParent<NetworkObject>();
-            if (netObj == null) 
+            if (netObj == null)
                 continue;
 
             float dist = Vector3.Distance(transform.position, netObj.transform.position);
@@ -119,7 +186,7 @@ public class ItemPickUp : NetworkBehaviour
             best = netObj;
         }
 
-        if (best == null) 
+        if (best == null)
             return;
 
         _heldItem = best;
@@ -133,7 +200,7 @@ public class ItemPickUp : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void ReleaseItemServerRpc(float holdTime)
     {
-        if (_heldItem == null) 
+        if (_heldItem == null)
             return;
 
         Vector3 dir = transform.forward;
