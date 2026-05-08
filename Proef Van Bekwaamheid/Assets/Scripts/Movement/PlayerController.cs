@@ -5,9 +5,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private Rigidbody _rb;
-    [SerializeField] private float _speed = 7f;
+    [SerializeField] private float _speed;
     [SerializeField] private float _rotationSpeed = 10f;
-    [SerializeField][Range(0f, 1f)] private float _inputSmoothing = 0.1f;
+    [SerializeField][Range(0f, 1f)] private float _inputSmoothing;
 
     private Vector2 _move;
     private Vector2 _smoothedMove;
