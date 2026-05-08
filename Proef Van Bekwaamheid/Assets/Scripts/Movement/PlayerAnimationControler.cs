@@ -13,10 +13,21 @@ public class PlayerAnimationControler : MonoBehaviour
     
     private bool _carrying;
     private bool _walking;
+    private Coroutine _doSpecialIdleRoutine;
 
-    private void Start()
+    private void Update()
     {
-        
+        bool isIdle = !_walking && !_carrying;
+        if (!isIdle)
+        {
+            if (_doSpecialIdleRoutine != null)
+            StopCoroutine(_doSpecialIdleRoutine);
+            _doSpecialIdleRoutine = null;
+            return;
+        }
+
+        if (_doSpecialIdleRoutine == null)
+            _doSpecialIdleRoutine = StartCoroutine(DoSpecialIdle());
     }
 
     public void SetWalk(bool walking)
@@ -33,8 +44,10 @@ public class PlayerAnimationControler : MonoBehaviour
 
     private IEnumerator DoSpecialIdle()
     {
+        Debug.Log("start Coroutine");
         yield return new WaitForSeconds(Random.Range(_minWait, _maxWait));
-        if (!_carrying && !_walking)
-            animator.SetTrigger(_specialTriggerName);
+        
+        animator.SetTrigger(_specialTriggerName);
+        _doSpecialIdleRoutine = null;
     }
 }

@@ -732,6 +732,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationControler
   animator: {fileID: 5791941686129775124}
+  _minWait: 10
+  _maxWait: 15
 --- !u!4 &3296818578279614970 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 380676887466920774, guid: 735fa361a2eb51c43bc5a651fc9cd0fc, type: 3}
