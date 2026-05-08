@@ -157,15 +157,12 @@ public class QRCodeScanner : MonoBehaviour
                 break;
             }
 
-        int width = _scanArea.rect.width > 0 ? (int)_scanArea.rect.width : 1080;
-        int height = _scanArea.rect.height > 0 ? (int)_scanArea.rect.height : 1920;
-
-        _camTexture = new WebCamTexture(selectedDevice.name, width, height);
+        _camTexture = new WebCamTexture(selectedDevice.name, 1920, 1080, 30);
         _camTexture.Play();
         _rawImagebackground.texture = _camTexture;
         _isCamAvailable = true;
 
-        Debug.Log($"<color=cyan>[QRCodeScanner] Camera started: {selectedDevice.name} at {width}x{height}</color>");
+        Debug.Log($"<color=cyan>[QRCodeScanner] Camera started: {selectedDevice.name}</color>");
     }
 
     private bool ValidateIPv4(string ipString)
