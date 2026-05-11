@@ -30,7 +30,7 @@ public class LevelStars : MonoBehaviour
         _starPointRequirements = new int[] { _pointsForStar1, _pointsForStar2, _pointsForStar3 };
 
         _rarityPointsMap = new Dictionary<Rarity, int>();
-        foreach (var entry in _rarityStarPointsArray)
+        foreach (RarityStarPoints entry in _rarityStarPointsArray)
         {
             _rarityPointsMap[entry.rarity] = entry.starPoints;
         }
@@ -54,14 +54,21 @@ public class LevelStars : MonoBehaviour
         CheckIfReachedThreeStars(totalStarPoints);
     }
 
+    private float GetTotalStarPoints()
+    {
+        var itemsByRarity = InventoryData.Instance.ItemsByRarity;
+
+        return _rarityPointsMap
+            .Where(x => itemsByRarity.ContainsKey(x.Key))
+            .Sum(x => itemsByRarity[x.Key].Count * x.Value);
+    }
+
     private void UpdateStarVisuals(float totalStarPoints)
     {
         float[] fillAmounts = GetStarFillAmounts(totalStarPoints);
 
         for (int i = 0; i < _stars.Length; i++)
-        {
             _stars[i].fillAmount = fillAmounts[i];
-        }
     }
 
     private void CheckIfReachedThreeStars(float totalStarPoints)
@@ -70,10 +77,8 @@ public class LevelStars : MonoBehaviour
         int filledStars = fillAmounts.Count(x => x >= 1f);
 
         if (filledStars == 3 && !_hasReachedThreeStars)
-        {
             _hasReachedThreeStars = true;
             // TODO: Add any behavior for reaching 3 stars (unlock, sound, etc.)
-        }
     }
 
     private float[] GetStarFillAmounts(float totalStarPoints)
@@ -90,14 +95,5 @@ public class LevelStars : MonoBehaviour
         }
 
         return fillAmounts;
-    }
-
-    private float GetTotalStarPoints()
-    {
-        var itemsByRarity = InventoryData.Instance.ItemsByRarity;
-
-        return _rarityPointsMap
-            .Where(x => itemsByRarity.ContainsKey(x.Key))
-            .Sum(x => itemsByRarity[x.Key].Count * x.Value);
     }
 }
