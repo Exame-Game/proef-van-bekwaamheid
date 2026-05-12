@@ -1,40 +1,54 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class InventoryData
 {
-    public Dictionary<Rarity, List<ItemData>> ItemsByRarity = new Dictionary<Rarity, List<ItemData>>();
-    public string InventoryName;
+    private static InventoryData s_Instance;
 
-    public void AddDictionairy(Dictionary<Rarity, List<ItemData>> other)
+    private Dictionary<Rarity, List<ItemData>> _itemsByRarity;
+
+    public event Action OnItemAdded;
+
+    public Dictionary<Rarity, List<ItemData>> ItemsByRarity => _itemsByRarity;
+
+    public static InventoryData Instance
     {
-        foreach (KeyValuePair<Rarity, List<ItemData>> entry in other)
-            if (ItemsByRarity.ContainsKey(entry.Key))
-                ItemsByRarity[entry.Key].AddRange(entry.Value);
-            else
-                ItemsByRarity[entry.Key] = new List<ItemData>(entry.Value);
+        get
+        {
+            if (s_Instance == null)
+                s_Instance = new InventoryData();
+
+            return s_Instance;
+        }
     }
 
-    public void Save()
+    private InventoryData()
     {
-        SaveSystem.Save<InventoryData>(this, InventoryName);
-    }
+        _itemsByRarity = new Dictionary<Rarity, List<ItemData>>();
 
-    public void RemoveSave()
-    {
-        SaveSystem.Delete(InventoryName);
-    }
-
-    public void RemoveInventory()
-    {
-        RemoveSave();
-        ItemsByRarity.Clear();
+        foreach (Rarity rarity in Enum.GetValues(typeof(Rarity)))
+            _itemsByRarity[rarity] = new List<ItemData>();
     }
 
     public void AddItem(ItemData item)
     {
-        if (ItemsByRarity.ContainsKey(item.Rarity))
-            ItemsByRarity[item.Rarity].Add(item);
-        else
-            ItemsByRarity[item.Rarity] = new List<ItemData> { item };
+        if (item == null)
+            return;
+
+        if (!_itemsByRarity.ContainsKey(item.Rarity))
+            _itemsByRarity[item.Rarity] = new List<ItemData>();
+
+        _itemsByRarity[item.Rarity].Add(item);
+        OnItemAdded?.Invoke();
+    }
+
+    public void RemoveItem(ItemData item)
+    {
+        if (item == null)
+            return;
+
+        if (_itemsByRarity.ContainsKey(item.Rarity))
+            _itemsByRarity[item.Rarity].Remove(item);
     }
 }
