@@ -445,6 +445,7 @@ MonoBehaviour:
   _throwHoldTime: 0.3
   _pickUpRange: 2
   _pickUpOffset: 1
+  _highlightMaterial: {fileID: 2100000, guid: e37a5c6150e524f4688337195e948a03, type: 2}
 --- !u!1 &8820811921094750790
 GameObject:
   m_ObjectHideFlags: 0
