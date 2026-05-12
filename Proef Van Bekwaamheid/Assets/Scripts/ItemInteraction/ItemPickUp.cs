@@ -49,11 +49,9 @@ public class ItemPickUp : NetworkBehaviour
 
     private void Update()
     {
-        if (IsOwner)
-        {
-            UpdateHighlight();
-        }
 
+        UpdateHighlight();
+        
         if (!IsOwner)
             return;
 
