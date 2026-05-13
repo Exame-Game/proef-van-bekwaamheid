@@ -50,6 +50,17 @@ public class GameTimer : NetworkBehaviour
         gameOver.Value = true;
     }
 
+    private void UpdateHourglass(float currentTime)
+    {
+        if (hourglassImage == null) 
+            return;
+
+        float amount = Map(currentTime, 0f, totalTime, 0f, 1f);
+        Debug.Log($"Updating hourglass: {currentTime} seconds remaining, fill amount: {amount}");
+
+        hourglassImage.fillAmount = amount;
+    }
+
     private void OnTimeChanged(float previous, float current)
     {
         UpdateHourglass(current);
@@ -61,15 +72,9 @@ public class GameTimer : NetworkBehaviour
             TriggerGameOver();
     }
 
-    private void UpdateHourglass(float currentTime)
+    private float Map(float value, float inMin, float inMax, float outMin, float outMax)
     {
-        if (hourglassImage == null) 
-            return;
-
-        float amount = Map(currentTime, 0f, totalTime, 0f, 1f);
-        Debug.Log($"Updating hourglass: {currentTime} seconds remaining, fill amount: {amount}");
-
-        hourglassImage.fillAmount = amount;
+        return outMin + (Mathf.Clamp01((value - inMin) / (inMax - inMin)) * (outMax - outMin));
     }
 
     private void TriggerGameOver()
@@ -83,9 +88,5 @@ public class GameTimer : NetworkBehaviour
         timeRemaining.Value = totalTime;
         gameOver.Value = false;
     }
-
-    float Map(float value, float inMin, float inMax, float outMin, float outMax)
-    {
-        return outMin + (Mathf.Clamp01((value - inMin) / (inMax - inMin)) * (outMax - outMin));
-    }
 }
+
