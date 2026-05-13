@@ -17,7 +17,11 @@ public class ItemCollection : MonoBehaviour
         if (other.gameObject.layer != LayerMask.NameToLayer("PickUp"))
             return;
 
-        InventoryData.Instance.AddItem(other.gameObject.GetComponent<Item>().data);
+        ItemData data = other.gameObject.GetComponent<Item>().data;
+        if (data == null)
+            return;
+
+        InventoryData.Instance.AddItem(data);
         UpdateInventoryText();
         _tween = other.gameObject.GetComponent<DOTweenAnimation>();
         StartCoroutine(Tween());
