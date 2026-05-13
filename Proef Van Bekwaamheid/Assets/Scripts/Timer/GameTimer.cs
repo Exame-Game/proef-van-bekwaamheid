@@ -5,7 +5,7 @@ using Unity.Netcode;
 public class GameTimer : NetworkBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private float totalTime = 180f;
+    [SerializeField] private float totalTime = 20f;
 
     [Header("UI References")]
     [SerializeField] private Image hourglassImage;
@@ -38,19 +38,16 @@ public class GameTimer : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsServer) 
-            return;
-
-        if (gameOver.Value) 
+        if (!IsServer || gameOver.Value)
             return;
 
         timeRemaining.Value -= Time.deltaTime;
 
-        if (timeRemaining.Value <= 0f)
-        {
-            timeRemaining.Value = 0f;
-            gameOver.Value = true;
-        }
+        if (timeRemaining.Value > 0f)
+            return;
+
+        timeRemaining.Value = 0f;
+        gameOver.Value = true;
     }
 
     private void OnTimeChanged(float previous, float current)
@@ -69,9 +66,10 @@ public class GameTimer : NetworkBehaviour
         if (hourglassImage == null) 
             return;
 
-        Debug.Log($"Updating hourglass: {currentTime:F2} seconds remaining");
-        hourglassImage.fillAmount = Map(timeRemaining.Value, 0f, 1);
-        Debug.Log($"Hourglass fill amount: {hourglassImage.fillAmount:F2}");
+        float amount = Map(currentTime, 0f, totalTime, 0f, 1f);
+        Debug.Log($"Updating hourglass: {currentTime} seconds remaining, fill amount: {amount}");
+
+        hourglassImage.fillAmount = amount;
     }
 
     private void TriggerGameOver()
@@ -86,11 +84,8 @@ public class GameTimer : NetworkBehaviour
         gameOver.Value = false;
     }
 
-    float Map(
-        float value, 
-        float inMin, 
-        float inMax)
+    float Map(float value, float inMin, float inMax, float outMin, float outMax)
     {
-        return Mathf.Clamp01((value - inMin) / (inMax - inMin));
+        return outMin + (Mathf.Clamp01((value - inMin) / (inMax - inMin)) * (outMax - outMin));
     }
 }
