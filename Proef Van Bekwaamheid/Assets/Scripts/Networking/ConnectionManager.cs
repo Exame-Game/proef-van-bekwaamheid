@@ -27,7 +27,7 @@ public class ConnectionManager : MonoBehaviour
 
     private void OnEnable()
     {
-        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+        StartCoroutine(WaitForNetworkManager());
     }
 
     private void OnDisable()
@@ -165,5 +165,11 @@ public class ConnectionManager : MonoBehaviour
             QRCodeScanner.Scan();
             yield return wait;
         }
+    }
+
+    private IEnumerator WaitForNetworkManager()
+    {
+        yield return new WaitUntil(() => NetworkManager.Singleton != null);
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
     }
 }
