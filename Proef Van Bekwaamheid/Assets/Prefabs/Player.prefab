@@ -638,7 +638,7 @@ MonoBehaviour:
   shadowOffset: {x: 0, y: 0, z: 0}
   maxOpacity: 0.5
   maxHeight: 5
---- !u!1001 &4051160784766807814
+--- !u!1001 &2920804927148720828
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
