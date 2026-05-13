@@ -9,22 +9,23 @@ using UnityEngine;
 public class PlayerAnimationControler : MonoBehaviour
 {
     // Animator parameter name constants — avoids magic strings scattered through the code
-    private const string _walkBoolName = "walking";
-    private const string _grabBoolName = "carrying";
-    private const string _specialTriggerName = "specialIdle";
+    private const string k_walkBoolName = "walking";
+    private const string k_grabBoolName = "carrying";
+    private const string k_specialTriggerName = "specialIdle";
 
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator _animator;
 
     // The random wait range (in seconds) before the special idle triggers
     [SerializeField] private float _minWait;
     [SerializeField] private float _maxWait;
 
+    // Reference to the running coroutine so we can stop it if the player moves
+    private Coroutine _doSpecialIdleRoutine;
+
     // Cached state to determine whether the player is currently idle
     private bool _carrying;
     private bool _walking;
 
-    // Reference to the running coroutine so we can stop it if the player moves
-    private Coroutine _doSpecialIdleRoutine;
 
     private void Update()
     {
@@ -41,8 +42,9 @@ public class PlayerAnimationControler : MonoBehaviour
         }
 
         // Start the special idle countdown if it isn't already running
-        if (_doSpecialIdleRoutine == null)
-            _doSpecialIdleRoutine = StartCoroutine(DoSpecialIdle());
+        if (_doSpecialIdleRoutine != null)
+            return;    
+        _doSpecialIdleRoutine = StartCoroutine(DoSpecialIdle());
     }
 
     /// <summary>
@@ -51,7 +53,7 @@ public class PlayerAnimationControler : MonoBehaviour
     /// </summary>
     public void SetWalk(bool walking)
     {
-        animator.SetBool(_walkBoolName, walking);
+        _animator.SetBool(k_walkBoolName, walking);
         _walking = walking;
     }
 
@@ -61,7 +63,7 @@ public class PlayerAnimationControler : MonoBehaviour
     /// </summary>
     public void SetGrab(bool grabing)
     {
-        animator.SetBool(_grabBoolName, grabing);
+        _animator.SetBool(k_grabBoolName, grabing);
         _carrying = grabing;
     }
 
@@ -71,10 +73,9 @@ public class PlayerAnimationControler : MonoBehaviour
     /// </summary>
     private IEnumerator DoSpecialIdle()
     {
-        Debug.Log("start Coroutine");
         yield return new WaitForSeconds(Random.Range(_minWait, _maxWait));
 
-        animator.SetTrigger(_specialTriggerName);
+        _animator.SetTrigger(k_specialTriggerName);
 
         // Null out so Update knows the routine has finished and can start a new one
         _doSpecialIdleRoutine = null;
