@@ -307,7 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 903098723
+  GlobalObjectIdHash: 3002671991
   InScenePlacedSourceGlobalObjectIdHash: 903098723
   DeferredDespawnTick: 0
   Ownership: 1
@@ -445,6 +445,7 @@ MonoBehaviour:
   _throwHoldTime: 0.3
   _pickUpRange: 2
   _pickUpOffset: 1
+  _highlightMaterial: {fileID: 2100000, guid: e37a5c6150e524f4688337195e948a03, type: 2}
 --- !u!1 &8820811921094750790
 GameObject:
   m_ObjectHideFlags: 0
