@@ -10991,7 +10991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 827750305
+  GlobalObjectIdHash: 2804166529
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -12025,7 +12025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 947602763
+  GlobalObjectIdHash: 1764791455
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -14088,7 +14088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 627701097
+  GlobalObjectIdHash: 2827506238
   InScenePlacedSourceGlobalObjectIdHash: 903098723
   DeferredDespawnTick: 0
   Ownership: 1
@@ -14113,7 +14113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 4194085203
+  GlobalObjectIdHash: 1189520178
   InScenePlacedSourceGlobalObjectIdHash: 903098723
   DeferredDespawnTick: 0
   Ownership: 1
@@ -14138,7 +14138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3646294172
+  GlobalObjectIdHash: 3726444300
   InScenePlacedSourceGlobalObjectIdHash: 903098723
   DeferredDespawnTick: 0
   Ownership: 1
@@ -14163,7 +14163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1051480048
+  GlobalObjectIdHash: 817323071
   InScenePlacedSourceGlobalObjectIdHash: 903098723
   DeferredDespawnTick: 0
   Ownership: 1
