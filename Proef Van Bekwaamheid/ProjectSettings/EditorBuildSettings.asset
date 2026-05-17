@@ -27,6 +27,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Development/TestScene item collectingArea/ItemCollectingArea.unity
     guid: aaf6279b2c0f75b459c39031f06deef2
+  - enabled: 1
+    path: Assets/Scenes/Development/TestScene Feature 2/HostScene.unity
+    guid: cebf5a611e708f74eb07d0688e040139
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
