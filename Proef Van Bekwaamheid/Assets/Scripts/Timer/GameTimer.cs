@@ -1,92 +1,55 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Netcode;
 
-public class GameTimer : NetworkBehaviour
+public class GameTimer : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] private float totalTime = 20f;
+    private const float k_DefaultTime = 20f;
 
-    [Header("UI References")]
-    [SerializeField] private Image hourglassImage;
+    [SerializeField] private Image _hourglassImage;
+    [SerializeField] private float _totalTime = k_DefaultTime;
 
-    private NetworkVariable<float> timeRemaining = new NetworkVariable<float>(
-        20f,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    public float _timeRemaining;
 
-    private NetworkVariable<bool> gameOver = new NetworkVariable<bool>(
-        false,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    private bool _isGameOver;
 
-    public override void OnNetworkSpawn()
+    private void Start()
     {
-        timeRemaining.OnValueChanged += OnTimeChanged;
-        gameOver.OnValueChanged += OnGameOverChanged;
-
-        UpdateHourglass(timeRemaining.Value);
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        timeRemaining.OnValueChanged -= OnTimeChanged;
-        gameOver.OnValueChanged -= OnGameOverChanged;
+        _timeRemaining = _totalTime;
     }
 
     private void Update()
     {
-        if (!IsServer || gameOver.Value)
+        if (_isGameOver)
             return;
 
-        timeRemaining.Value -= Time.deltaTime;
+        _timeRemaining -= Time.deltaTime;
 
-        if (timeRemaining.Value > 0f)
-            return;
+        if (_timeRemaining <= 0f)
+        {
+            _timeRemaining = 0f;
+            _isGameOver = true;
+            TriggerGameOver();
+        }
 
-        timeRemaining.Value = 0f;
-        gameOver.Value = true;
+        UpdateHourglass(_timeRemaining);
+    }
+
+    public void ResetTimer()
+    {
+        _timeRemaining = _totalTime;
+        _isGameOver = false;
     }
 
     private void UpdateHourglass(float currentTime)
     {
-        if (hourglassImage == null) 
+        if (_hourglassImage == null)
             return;
 
-        float amount = Map(currentTime, 0f, totalTime, 0f, 1f);
-        Debug.Log($"Updating hourglass: {currentTime} seconds remaining, fill amount: {amount}");
-
-        hourglassImage.fillAmount = amount;
-    }
-
-    private void OnTimeChanged(float previous, float current)
-    {
-        UpdateHourglass(current);
-    }
-
-    private void OnGameOverChanged(bool previous, bool current)
-    {
-        if (current)
-            TriggerGameOver();
-    }
-
-    private float Map(float value, float inMin, float inMax, float outMin, float outMax)
-    {
-        return outMin + (Mathf.Clamp01((value - inMin) / (inMax - inMin)) * (outMax - outMin));
+        _hourglassImage.fillAmount = Mathf.InverseLerp(0f, _totalTime, currentTime);
     }
 
     private void TriggerGameOver()
     {
         Debug.Log("Time's up! You lose.");
     }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void ResetTimerServerRpc()
-    {
-        timeRemaining.Value = totalTime;
-        gameOver.Value = false;
-    }
 }
-
