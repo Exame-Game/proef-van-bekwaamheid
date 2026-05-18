@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 [RequireComponent(typeof(Light))]
-[RequireComponent(typeof(GameTimer))]
 public class DayNightCycle : MonoBehaviour
 {
     [Header("Sun")]
@@ -12,23 +12,14 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private Gradient _ambientColor;
 
     private Light _sun;
-    private GameTimer _gameTimer;
-    private float _currentTime;
     
     private void Awake()
     {
         _sun = GetComponent<Light>();
-        _gameTimer = GetComponent<GameTimer>();
         InitializeDefaults();
     }
 
-    private void Update()
-    {
-        _currentTime = (_currentTime + Time.deltaTime / _gameTimer._totalTime) % 1f;
-        ApplyCycle(_currentTime);
-    }
-
-    private void ApplyCycle(float t)
+    public void ApplyCycle(float t)
     {
         // 0 = midnight, 0.25 = sunrise, 0.5 = noon, 0.75 = sunset
         transform.localRotation = Quaternion.Euler((t * 360f) - 90f, 170f, 0f);

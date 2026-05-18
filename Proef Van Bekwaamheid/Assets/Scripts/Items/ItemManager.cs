@@ -16,13 +16,19 @@ public class ItemSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (!NetworkManager.Singleton.IsServer) 
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        if (!NetworkManager.Singleton.IsServer)
             return;
 
         SpawnItems();
+
     }
 
-    private void SpawnItems()
+    public void SpawnItems()
     {
         for (int i = 0; i < _spawnPoints.Length; i++)
         {

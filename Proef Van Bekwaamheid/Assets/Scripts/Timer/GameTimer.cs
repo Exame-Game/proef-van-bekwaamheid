@@ -1,6 +1,9 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+
+[RequireComponent(typeof(DayNightCycle))]
 
 public class GameTimer : MonoBehaviour
 {
@@ -11,29 +14,15 @@ public class GameTimer : MonoBehaviour
     public float _totalTime = k_DefaultTime;
     public UnityEvent OnGameLost;
 
+    private DayNightCycle _dayNightCycle;
     private float _timeRemaining;
     private bool _isGameOver;
 
     private void Start()
     {
+        _dayNightCycle = GetComponent<DayNightCycle>();
         _timeRemaining = _totalTime;
-    }
-
-    private void Update()
-    {
-        if (_isGameOver)
-            return;
-
-        _timeRemaining -= Time.deltaTime;
-
-        if (_timeRemaining <= 0f)
-        {
-            _timeRemaining = 0f;
-            _isGameOver = true;
-            TriggerGameOver();
-        }
-
-        UpdateHourglass(_timeRemaining);
+        _isGameOver = false;
     }
 
     public void ResetTimer()
@@ -42,9 +31,14 @@ public class GameTimer : MonoBehaviour
         _isGameOver = false;
     }
 
+    public void StartTimerAndCycle()
+    {
+        ResetTimer();
+        StartCoroutine(StartCycleIEnumerator());
+    }
+
     private void TriggerGameOver()
     {
-        Debug.Log("Time's up! You lose.");
         OnGameLost?.Invoke();
     }
 
@@ -54,5 +48,27 @@ public class GameTimer : MonoBehaviour
             return;
 
         _hourglassImage.fillAmount = Mathf.InverseLerp(0f, _totalTime, currentTime);
+    }
+
+    private IEnumerator StartCycleIEnumerator()
+    {
+        while (true)
+        {
+            if (_isGameOver)
+                yield break;
+
+            _timeRemaining -= Time.deltaTime;
+
+            if (_timeRemaining <= 0f)
+            {
+                _timeRemaining = 0f;
+                _isGameOver = true;
+                TriggerGameOver();
+            }
+
+            UpdateHourglass(_timeRemaining);
+            _dayNightCycle.ApplyCycle(1f - (_timeRemaining / _totalTime));
+            yield return null;
+        }
     }
 }

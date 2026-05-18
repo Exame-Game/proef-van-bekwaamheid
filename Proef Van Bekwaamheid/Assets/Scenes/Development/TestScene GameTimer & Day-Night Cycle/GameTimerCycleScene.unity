@@ -1139,6 +1139,40 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1894524372415226975, guid: 5fd29ffcc6a7a4f4eb46a386f1ba951f, type: 3}
   m_PrefabInstance: {fileID: 239809520}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &244573974 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4735643688720146831, guid: 86caee099c5a51648bc6887d370fb6ab, type: 3}
+  m_PrefabInstance: {fileID: 3435493578180205666}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &244573980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244573974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c6f3d63885c4fe498c66c823ed53aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameTimer
+  _hourglassImage: {fileID: 1543482852}
+  _totalTime: 30
+  OnGameLost:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2111671204}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &315279408
 GameObject:
   m_ObjectHideFlags: 0
@@ -3389,6 +3423,7 @@ GameObject:
   - component: {fileID: 687442839}
   - component: {fileID: 687442841}
   - component: {fileID: 687442840}
+  - component: {fileID: 687442842}
   m_Layer: 0
   m_Name: Network
   m_TagString: Untagged
@@ -3442,6 +3477,20 @@ MonoBehaviour:
   QRCodeGenerator: {fileID: 687442840}
   QRCodeScanner: {fileID: 1854413916}
   clientIpInputField: {fileID: 527002660}
+--- !u!114 &687442842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687442834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ab0c24cc2dacc4490c5924a99c6558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RestartGame
+  connectionManager: {fileID: 687442841}
+  itemSpawner: {fileID: 1620000902}
 --- !u!1 &715246313
 GameObject:
   m_ObjectHideFlags: 0
@@ -3599,7 +3648,6 @@ GameObject:
   - component: {fileID: 719854199}
   - component: {fileID: 719854198}
   - component: {fileID: 719854197}
-  - component: {fileID: 719854196}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -3627,18 +3675,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 75}
   m_SizeDelta: {x: 200, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &719854196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 719854194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ab0c24cc2dacc4490c5924a99c6558, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RestartGame
 --- !u!114 &719854197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3683,7 +3719,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 719854196}
+      - m_Target: {fileID: 2111671204}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RestartGame, Assembly-CSharp
         m_MethodName: RestartGameScene
         m_Mode: 1
@@ -3695,10 +3743,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2111671204}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1306163406}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SetHostUIStateFromInt
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11326,6 +11374,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 244573980}
+        m_TargetAssemblyTypeName: GameTimer, Assembly-CSharp
+        m_MethodName: StartTimerAndCycle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1868792531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12748,7 +12808,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4735643688720146831, guid: 86caee099c5a51648bc6887d370fb6ab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 244573980}
   m_SourcePrefab: {fileID: 100100000, guid: 86caee099c5a51648bc6887d370fb6ab, type: 3}
 --- !u!1001 &3825907972323607907
 PrefabInstance:

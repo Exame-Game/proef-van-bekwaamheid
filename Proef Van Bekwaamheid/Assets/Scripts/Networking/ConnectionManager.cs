@@ -42,6 +42,11 @@ public class ConnectionManager : MonoBehaviour
 
     private void Start()
     {
+        InitializeHostAndClient();
+    }
+
+    public void InitializeHostAndClient()
+    {
 #if UNITY_EDITOR
 
         IReadOnlyList<string> tags = CurrentPlayer.Tags;
