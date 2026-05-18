@@ -14353,8 +14353,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 765097817}
     - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
       propertyPath: AvailableItems.Array.size
-      value: 6
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
       propertyPath: 'AvailableItems.Array.data[0]'
@@ -14380,6 +14384,66 @@ PrefabInstance:
       propertyPath: 'AvailableItems.Array.data[5]'
       value: 
       objectReference: {fileID: 11400000, guid: df280937086025648b27517b0adfad2d, type: 2}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: 'AvailableItems.Array.data[6]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 18e7d2b78aba19a418dc3d51547d0d08, type: 2}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: 'AvailableItems.Array.data[7]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1fdcb83d370cd4f48b988089c9bf5842, type: 2}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: 'AvailableItems.Array.data[8]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 19fbdfa4328e545478a31d47e77f5fc7, type: 2}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: 'AvailableItems.Array.data[9]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 62d3df8f1b08ab548bf7f7f430589802, type: 2}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: 'AvailableItems.Array.data[10]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a3d8bafb39a383d43adfe0e4f3e20afe, type: 2}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: 'AvailableItems.Array.data[11]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 69238f7dd094e0c4b84b326f4c91c6ad, type: 2}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[1].Rarity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[2].Rarity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[3].Rarity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[4].Rarity
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[0].MaxCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[1].MaxCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[2].MaxCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[3].MaxCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876903692223718029, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
+      propertyPath: _rarityRules.Array.data[4].MaxCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6626350373572778054, guid: 7379cd0feaf5e2c438a26aa7a02ba80f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.23
