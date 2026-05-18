@@ -25,7 +25,6 @@ public class ItemSpawner : MonoBehaviour
             return;
 
         SpawnItems();
-
     }
 
     public void SpawnItems()

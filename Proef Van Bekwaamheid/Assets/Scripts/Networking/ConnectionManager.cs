@@ -47,6 +47,25 @@ public class ConnectionManager : MonoBehaviour
 
     public void InitializeHostAndClient()
     {
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
+        {
+            foreach (NetworkClient client in NetworkManager.Singleton.ConnectedClientsList)
+                if (client.PlayerObject != null)
+                    client.PlayerObject.Despawn();
+
+            if (NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsHost)
+                NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+
+            NetworkManager.Singleton.Shutdown();
+        }
+
+        QRCodeScanner.OnIPDecoded -= StartClient;
+        if (_scanCoroutine != null)
+        {
+            StopCoroutine(_scanCoroutine);
+            _scanCoroutine = null;
+        }
+
 #if UNITY_EDITOR
 
         IReadOnlyList<string> tags = CurrentPlayer.Tags;
@@ -75,14 +94,14 @@ public class ConnectionManager : MonoBehaviour
         }
 
 #elif HOST_BUILD
-        hostUI.SetActive(true);
-        clientUI.SetActive(false);
-        StartHost();
+    hostUI.SetActive(true);
+    clientUI.SetActive(false);
+    StartHost();
 #else
-        hostUI.SetActive(false);
-        clientUI.SetActive(true);
-        QRCodeScanner.OnIPDecoded += StartClient;
-        _scanCoroutine = StartCoroutine(ScanQRLoop());
+    hostUI.SetActive(false);
+    clientUI.SetActive(true);
+    QRCodeScanner.OnIPDecoded += StartClient;
+    _scanCoroutine = StartCoroutine(ScanQRLoop());
 #endif
     }
 
@@ -104,6 +123,8 @@ public class ConnectionManager : MonoBehaviour
         _isScanning = false;
         if (_scanCoroutine != null)
             StopCoroutine(_scanCoroutine);
+
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
 
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(ip, 7777);
@@ -152,7 +173,7 @@ public class ConnectionManager : MonoBehaviour
 
         bool isApproved = role != "host";
 
-        response.Approved = isApproved;
+        response.Approved = true;
 
         if (!isApproved)
             return;
@@ -165,7 +186,7 @@ public class ConnectionManager : MonoBehaviour
         if (NetworkManager.Singleton.IsHost)
             return;
 
-        UIManager.Instance.SetClientUIState(ClientUIState.QRScanner);
+        UIManager.Instance.SetClientUIState(ClientUIState.Menu);
 
         if (_scanCoroutine != null)
             StopCoroutine(_scanCoroutine);
