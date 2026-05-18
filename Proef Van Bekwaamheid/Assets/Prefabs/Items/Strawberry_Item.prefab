@@ -217,7 +217,7 @@ MonoBehaviour:
   targetGO: {fileID: 0}
   tweenTargetIsTargetGO: 1
   delay: 0
-  duration: 0.7
+  duration: 1.2
   easeType: 30
   easeCurve:
     serializedVersion: 2
@@ -253,7 +253,7 @@ MonoBehaviour:
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 5772582141161899394, guid: a09434ac1dbd8ee489bfc54f8b087cf2, type: 3}
+  target: {fileID: 1248848792571693196}
   animationType: 5
   targetType: 11
   forcedTargetType: 0
@@ -332,9 +332,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9178972021663528687, guid: 20b5b402dd17ac64ab6f05e25036dcc8, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9178972021663528687, guid: 20b5b402dd17ac64ab6f05e25036dcc8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5c10ea81595e4ba49a7c4961e6dc3dac, type: 2}
+    - target: {fileID: 9178972021663528687, guid: 20b5b402dd17ac64ab6f05e25036dcc8, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e37a5c6150e524f4688337195e948a03, type: 2}
     m_RemovedComponents:
     - {fileID: 5906573845803587357, guid: 20b5b402dd17ac64ab6f05e25036dcc8, type: 3}
     m_RemovedGameObjects: []
