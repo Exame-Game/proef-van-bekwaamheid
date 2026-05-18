@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class GameTimer : MonoBehaviour
@@ -8,6 +9,7 @@ public class GameTimer : MonoBehaviour
     [SerializeField] private Image _hourglassImage;
 
     public float _totalTime = k_DefaultTime;
+    public UnityEvent OnGameLost;
 
     private float _timeRemaining;
     private bool _isGameOver;
@@ -43,6 +45,7 @@ public class GameTimer : MonoBehaviour
     private void TriggerGameOver()
     {
         Debug.Log("Time's up! You lose.");
+        OnGameLost?.Invoke();
     }
 
     private void UpdateHourglass(float currentTime)
