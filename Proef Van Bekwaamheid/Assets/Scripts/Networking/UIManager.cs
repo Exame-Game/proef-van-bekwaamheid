@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
     [Header("Slide Settings")]
     [SerializeField] private float slideDuration = 0.35f;
     [SerializeField] private Ease slideEase = Ease.OutCubic;
-    [SerializeField] private Vector2 hiddenOffset = new Vector2(0f, -1200f); // Slides from bottom
+    [SerializeField] private Vector2 hiddenOffset = new Vector2(-4000f, 0f);
 
     public static UIManager Instance { get; private set; }
 
@@ -41,13 +41,13 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        // Hide all panels instantly at start
         HideAllInstant();
         SetClientUIState(initialState);
         SetHostUIState(initialHostState);
@@ -61,10 +61,12 @@ public class UIManager : MonoBehaviour
             ClientControlSettingsUI, HostLobbyUI, HostGameUI
         };
 
-        foreach (var panel in all)
+        foreach (GameObject panel in all)
         {
-            if (panel == null) continue;
-            var rect = panel.GetComponent<RectTransform>();
+            if (panel == null) 
+                continue;
+
+            RectTransform rect = panel.GetComponent<RectTransform>();
             rect.anchoredPosition = hiddenOffset;
             panel.SetActive(false);
         }
@@ -72,9 +74,11 @@ public class UIManager : MonoBehaviour
 
     private void SlideIn(GameObject panel)
     {
-        if (panel == null) return;
+        if (panel == null) 
+            return;
+
         panel.SetActive(true);
-        var rect = panel.GetComponent<RectTransform>();
+        RectTransform rect = panel.GetComponent<RectTransform>();
         rect.anchoredPosition = hiddenOffset;
         rect.DOAnchorPos(Vector2.zero, slideDuration)
             .SetEase(slideEase)
@@ -88,7 +92,7 @@ public class UIManager : MonoBehaviour
             onComplete?.Invoke();
             return;
         }
-        var rect = panel.GetComponent<RectTransform>();
+        RectTransform rect = panel.GetComponent<RectTransform>();
         rect.DOAnchorPos(hiddenOffset, slideDuration)
             .SetEase(slideEase)
             .SetUpdate(true)
@@ -113,10 +117,10 @@ public class UIManager : MonoBehaviour
             _ => null
         };
 
-        if (next == _activeClientPanel) return;
+        if (next == _activeClientPanel) 
+            return;
 
-        // Slide out old, then slide in new
-        var previous = _activeClientPanel;
+        GameObject previous = _activeClientPanel;
         _activeClientPanel = next;
         SlideOut(previous, () => SlideIn(next));
     }
@@ -130,9 +134,10 @@ public class UIManager : MonoBehaviour
             _ => null
         };
 
-        if (next == _activeHostPanel) return;
+        if (next == _activeHostPanel) 
+            return;
 
-        var previous = _activeHostPanel;
+        GameObject previous = _activeHostPanel;
         _activeHostPanel = next;
         SlideOut(previous, () => SlideIn(next));
     }
