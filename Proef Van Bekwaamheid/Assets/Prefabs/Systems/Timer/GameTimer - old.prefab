@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4220648872052460264}
   - component: {fileID: 8756545579734881798}
   m_Layer: 0
-  m_Name: GameTimer
+  m_Name: GameTimer - old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameTimer
   _hourglassImage: {fileID: 0}
-  _totalTime: 20
+  _totalTime: 240
+  _timeRemaining: 0

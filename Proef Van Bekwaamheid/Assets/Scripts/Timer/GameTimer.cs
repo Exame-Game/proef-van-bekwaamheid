@@ -6,9 +6,9 @@ public class GameTimer : MonoBehaviour
     private const float k_DefaultTime = 20f;
 
     [SerializeField] private Image _hourglassImage;
-    [SerializeField] private float _totalTime = k_DefaultTime;
+    [SerializeField] public float _totalTime = k_DefaultTime;
 
-    public float _timeRemaining;
+    private float _timeRemaining;
 
     private bool _isGameOver;
 

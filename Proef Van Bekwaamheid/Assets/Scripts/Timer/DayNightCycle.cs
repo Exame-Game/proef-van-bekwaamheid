@@ -24,7 +24,7 @@ public class DayNightCycle : MonoBehaviour
 
     private void Update()
     {
-        _currentTime = (_currentTime + Time.deltaTime / _gameTimer._timeRemaining) % 1f;
+        _currentTime = (_currentTime + Time.deltaTime / _gameTimer._totalTime) % 1f;
         ApplyCycle(_currentTime);
     }
 

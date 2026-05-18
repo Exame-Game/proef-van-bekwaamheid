@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using Unity.Multiplayer.Center.Common.Analytics;
 
 
 
@@ -25,6 +27,8 @@ public class ConnectionManager : MonoBehaviour
     private Coroutine _scanCoroutine;
     private bool _isScanning;
 
+    private bool _isHost;
+
     private void OnEnable()
     {
         StartCoroutine(WaitForNetworkManager());
@@ -39,9 +43,17 @@ public class ConnectionManager : MonoBehaviour
     private void Start()
     {
 #if UNITY_EDITOR
-        string[] tags = CurrentPlayer.ReadOnlyTags();
 
-        if (Array.IndexOf(tags, "Host") >= 0)
+        IReadOnlyList<string> tags = CurrentPlayer.Tags;
+        if (tags != null)
+            foreach (string tag in tags)
+                if (tag == "Host")
+                {
+                    _isHost = true;
+                    break;
+                }
+
+        if (_isHost)
         {
             hostUI.SetActive(true);
             clientUI.SetActive(false);
@@ -56,6 +68,7 @@ public class ConnectionManager : MonoBehaviour
             QRCodeScanner.OnIPDecoded += StartClient;
             _scanCoroutine = StartCoroutine(ScanQRLoop());
         }
+
 #elif HOST_BUILD
         hostUI.SetActive(true);
         clientUI.SetActive(false);
@@ -70,6 +83,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void StartHost()
     {
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes("host");
         NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         QRCodeGenerator.GenerateQRCode(GetLocalIPAddress());
@@ -82,13 +96,15 @@ public class ConnectionManager : MonoBehaviour
 
     public void StartClient(string ip)
     {
-        _isScanning = false; // stop loop before connecting
+        _isScanning = false;
         if (_scanCoroutine != null)
             StopCoroutine(_scanCoroutine);
 
-        Debug.Log($"[ConnectionManager] Starting client with IP: {ip}");
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(ip, 7777);
+
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes("client");
+
         NetworkManager.Singleton.StartClient();
     }
 
@@ -127,8 +143,16 @@ public class ConnectionManager : MonoBehaviour
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
-        response.Approved = true;
-        response.CreatePlayerObject = false;
+        string role = System.Text.Encoding.UTF8.GetString(request.Payload);
+
+        bool isApproved = role != "host";
+
+        response.Approved = isApproved;
+
+        if (!isApproved)
+            return;
+
+        response.CreatePlayerObject = true;
     }
 
     private void OnClientDisconnected(ulong clientId)
@@ -136,7 +160,6 @@ public class ConnectionManager : MonoBehaviour
         if (NetworkManager.Singleton.IsHost)
             return;
 
-        Debug.Log("[ConnectionManager] Client disconnected — restarting QR scan loop.");
         UIManager.Instance.SetClientUIState(ClientUIState.QRScanner);
 
         if (_scanCoroutine != null)
@@ -150,14 +173,12 @@ public class ConnectionManager : MonoBehaviour
         _isScanning = true;
         WaitForSeconds wait = new WaitForSeconds(QRCodeScanner.scanInterval);
 
-        // Wait a frame so Netcode finishes cleaning up IsConnectedClient state
-        yield return null;
+        yield return null; // extra frame
 
         while (_isScanning && !NetworkManager.Singleton.IsHost)
         {
             if (NetworkManager.Singleton.IsConnectedClient)
             {
-                Debug.Log("[ConnectionManager] Connection established, stopping scan loop.");
                 _isScanning = false;
                 yield break;
             }
