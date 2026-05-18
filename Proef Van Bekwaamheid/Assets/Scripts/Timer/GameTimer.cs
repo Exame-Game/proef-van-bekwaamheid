@@ -6,10 +6,10 @@ public class GameTimer : MonoBehaviour
     private const float k_DefaultTime = 20f;
 
     [SerializeField] private Image _hourglassImage;
-    [SerializeField] public float _totalTime = k_DefaultTime;
+
+    public float _totalTime = k_DefaultTime;
 
     private float _timeRemaining;
-
     private bool _isGameOver;
 
     private void Start()
@@ -40,16 +40,16 @@ public class GameTimer : MonoBehaviour
         _isGameOver = false;
     }
 
+    private void TriggerGameOver()
+    {
+        Debug.Log("Time's up! You lose.");
+    }
+
     private void UpdateHourglass(float currentTime)
     {
         if (_hourglassImage == null)
             return;
 
         _hourglassImage.fillAmount = Mathf.InverseLerp(0f, _totalTime, currentTime);
-    }
-
-    private void TriggerGameOver()
-    {
-        Debug.Log("Time's up! You lose.");
     }
 }

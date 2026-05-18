@@ -56,7 +56,7 @@ public class DayNightCycle : MonoBehaviour
 
     private static Gradient BuildDefaultSunColor()
     {
-        var gradient = new Gradient();
+        Gradient gradient = new Gradient();
         gradient.SetKeys(
             new GradientColorKey[]
             {
@@ -70,6 +70,7 @@ public class DayNightCycle : MonoBehaviour
             },
             new GradientAlphaKey[] { new(1f, 0f), new(1f, 1f) }
         );
+
         return gradient;
     }
 
@@ -88,7 +89,7 @@ public class DayNightCycle : MonoBehaviour
 
     private static Gradient BuildDefaultAmbientColor()
     {
-        var gradient = new Gradient();
+        Gradient gradient = new Gradient();
         gradient.SetKeys(
             new GradientColorKey[]
             {
@@ -100,6 +101,7 @@ public class DayNightCycle : MonoBehaviour
             },
             new GradientAlphaKey[] { new(1f, 0f), new(1f, 1f) }
         );
+
         return gradient;
     }
 }
