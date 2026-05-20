@@ -5,8 +5,9 @@ using UnityEngine;
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
-    [SerializeField] private MusicLibrary musicLibrary;
-    [SerializeField] private AudioSource musicSource;
+
+    [SerializeField] private MusicLibrary _musicLibrary;
+    [SerializeField] private AudioSource _musicSource;
 
     void Awake()
     {
@@ -20,10 +21,9 @@ public class MusicManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
     
-
     public void PlayMusic(string trackName)
     {
-        StartCoroutine(AnimateMusicCrossfade(musicLibrary.GetClipFromName(trackName), 0.5f));
+        StartCoroutine(AnimateMusicCrossfade(_musicLibrary.GetClipFromName(trackName), 0.5f));
     }
 
     public void StopMusic()
@@ -37,18 +37,18 @@ public class MusicManager : MonoBehaviour
         while (percent < 1f)
         {
             percent += Time.deltaTime * 1 / fadeDuration;
-            musicSource.volume = Mathf.Lerp(1f, 0f, percent);
+            _musicSource.volume = Mathf.Lerp(1f, 0f, percent);
             yield return null;
         }
 
-        musicSource.clip = nextTrack;
-        musicSource.Play();
+        _musicSource.clip = nextTrack;
+        _musicSource.Play();
 
         percent = 0f;
         while (percent < 1f)
         {
             percent += Time.deltaTime * 1 / fadeDuration;
-            musicSource.volume = Mathf.Lerp(0f, 1f, percent);
+            _musicSource.volume = Mathf.Lerp(0f, 1f, percent);
             yield return null;
         }
     }
