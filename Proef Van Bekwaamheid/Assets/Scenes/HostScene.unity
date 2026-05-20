@@ -2231,8 +2231,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41313e9855ac31d4d820fa023c3f0957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  sfxLibrary: {fileID: 205849178}
-  sfx2DSource: {fileID: 400452741}
+  _sfxLibrary: {fileID: 205849178}
+  _sfx2DSource: {fileID: 400452741}
 --- !u!114 &205849180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2245,7 +2245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f823fe9333173e345b7563ee6e38f663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicLibrary
-  musicTracks:
+  _musicTracks:
   - trackName: DayMusic
     clip: {fileID: 8300000, guid: 0fe1d099f2ad64b44a50682d36d6fa50, type: 3}
   - trackName: NightMusic
@@ -2262,8 +2262,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fd64bbf57bf8b7439125cbdb5a59e5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicManager
-  musicLibrary: {fileID: 205849180}
-  musicSource: {fileID: 33390722}
+  _musicLibrary: {fileID: 205849180}
+  _musicSource: {fileID: 33390722}
 --- !u!1001 &296594576
 PrefabInstance:
   m_ObjectHideFlags: 0
