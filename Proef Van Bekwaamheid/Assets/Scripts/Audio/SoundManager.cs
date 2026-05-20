@@ -4,8 +4,8 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
 
-    [SerializeField] private SoundLibrary sfxLibrary;
-    [SerializeField] private AudioSource sfx2DSource;
+    [SerializeField] private SoundLibrary _sfxLibrary;
+    [SerializeField] private AudioSource _sfx2DSource;
 
     private void Awake()
     {
@@ -32,11 +32,11 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound3D(Vector3 position, string soundName)
     {
-        PlaySound3D(sfxLibrary.GetClipFromName(soundName), position);
+        PlaySound3D(_sfxLibrary.GetClipFromName(soundName), position);
     }
 
     public void PlaySound2D(string soundName)
     {
-       sfx2DSource.PlayOneShot(sfxLibrary.GetClipFromName(soundName));
+       _sfx2DSource.PlayOneShot(_sfxLibrary.GetClipFromName(soundName));
     }
 }

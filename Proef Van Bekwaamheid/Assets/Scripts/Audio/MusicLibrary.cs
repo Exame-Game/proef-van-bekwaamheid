@@ -9,11 +9,11 @@ public struct MusicTrack
 
 public class MusicLibrary : MonoBehaviour
 {
-    [SerializeField] private MusicTrack[] musicTracks;
+    [SerializeField] private MusicTrack[] _musicTracks;
     
     public AudioClip GetClipFromName(string trackName)
     {
-        foreach (MusicTrack track in musicTracks)
+        foreach (MusicTrack track in _musicTracks)
         {
             if (track.trackName == trackName)
                 return track.clip;
