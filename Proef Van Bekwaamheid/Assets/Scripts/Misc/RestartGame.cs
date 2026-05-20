@@ -6,6 +6,7 @@ public class RestartGame : MonoBehaviour
 {
     public ConnectionManager connectionManager;
     public ItemSpawner itemSpawner;
+    public ItemCollection itemCollection;
 
     public void RestartGameScene()
     {
@@ -31,5 +32,8 @@ public class RestartGame : MonoBehaviour
 
         itemSpawner.ResetItems();
         itemSpawner.Initialize();
+
+        InventoryData.Instance.ResetInventory();
+        itemCollection.UpdateInventoryText();
     }
 }

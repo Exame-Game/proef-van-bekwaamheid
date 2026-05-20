@@ -47,6 +47,13 @@ public class LevelStars : MonoBehaviour
         _fillSequence?.Kill();
     }
 
+    public void ResetStars()
+    {
+        _hasReachedThreeStars = false;
+        foreach (Image star in _stars)
+            star.fillAmount = 0f;
+    }
+
     private void UpdateStars()
     {
         float totalStarPoints = GetTotalStarPoints();
