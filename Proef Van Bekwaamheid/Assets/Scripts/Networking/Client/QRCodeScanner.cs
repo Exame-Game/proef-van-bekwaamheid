@@ -105,7 +105,7 @@ public class QRCodeScanner : MonoBehaviour
                 if (ValidateIPv4(decodedIPAddress))
                 {
                     OnIPDecoded?.Invoke(decodedIPAddress);
-                    UIManager.Instance.SetClientUIState(ClientUIState.Controller);
+                    UIManager.Instance.SetClientUIState(ClientUIState.Ready);
                 }
             }
             else
