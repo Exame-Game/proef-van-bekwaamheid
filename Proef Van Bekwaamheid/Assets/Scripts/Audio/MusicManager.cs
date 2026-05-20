@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 public class MusicManager : MonoBehaviour
@@ -18,6 +19,7 @@ public class MusicManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    
 
     public void PlayMusic(string trackName, float fadeDuration = 0.5F)
     {
