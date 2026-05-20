@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
@@ -8,11 +8,9 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private LayerMask _itemLayer;
     [SerializeField] private LayerMask _groundLayer;
 
-    [SerializeField] private int _maxItems = 10;
+    [SerializeField] private RaritySpawnRule[] _rarityRules;
 
     public List<ItemSO> AvailableItems;
-
-    private int _currentItems = 0;
 
     private void Start()
     {
@@ -29,10 +27,24 @@ public class ItemSpawner : MonoBehaviour
 
     public void SpawnItems()
     {
+        Dictionary<Rarity, int> spawnedCounts = new Dictionary<Rarity, int>();
+        Dictionary<Rarity, int> maxCounts = new Dictionary<Rarity, int>();
+
+        foreach (RaritySpawnRule rule in _rarityRules)
+        {
+            spawnedCounts[rule.Rarity] = 0;
+            maxCounts[rule.Rarity] = rule.MaxCount;
+        }
+
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
-            if (_currentItems >= _maxItems)
+            List<ItemSO> affordable = AvailableItems.FindAll(item => spawnedCounts[item.Rarity] < maxCounts[item.Rarity]);
+
+            if (affordable.Count == 0) 
                 break;
+
+            // if (_currentItems >= _maxItems)
+            //     break;
 
             GameObject spawnPoint = _spawnPoints[i];
             if (spawnPoint == null)
@@ -42,8 +54,9 @@ public class ItemSpawner : MonoBehaviour
             if (hits.Length > 0)
                 continue;
 
-            int randomIndex = Random.Range(0, AvailableItems.Count);
-            GameObject prefab = AvailableItems[randomIndex].Prefab;
+            int randomIndex = Random.Range(0, affordable.Count);
+            ItemSO selectedItem = affordable[randomIndex];
+            GameObject prefab = selectedItem.Prefab;
 
             if (prefab == null)
                 continue;
@@ -54,9 +67,9 @@ public class ItemSpawner : MonoBehaviour
             {
                 GameObject obj = Instantiate(prefab, hit.point, Quaternion.identity);
 
-                NetworkObject netObj = obj.GetComponent<NetworkObject>();
-                if (netObj != null)
-                    netObj.Spawn();
+                // NetworkObject netObj = obj.GetComponent<NetworkObject>();
+                // if (netObj != null)
+                //     netObj.Spawn();
 
                 Item item = obj.GetComponent<Item>();
 
@@ -66,16 +79,13 @@ public class ItemSpawner : MonoBehaviour
                     obj.transform.position = hit.point + Vector3.up * halfHeight;
                 }
 
-                _currentItems++;
+                spawnedCounts[selectedItem.Rarity]++;
             }
         }
     }
 
     public void ResetItems()
     {
-        if (!NetworkManager.Singleton.IsServer) 
-            return;
-
         Item[] items = FindObjectsOfType<Item>();
 
         foreach (Item item in items)
@@ -83,16 +93,15 @@ public class ItemSpawner : MonoBehaviour
             if (item == null) 
                 continue;
 
-            NetworkObject netObj = item.GetComponent<NetworkObject>();
-
-            if (netObj != null && netObj.IsSpawned)
-                netObj.Despawn();
-
             Destroy(item.gameObject);
         }
-
-        _currentItems = 0;
-
         SpawnItems();
     }
+}
+
+[System.Serializable]
+public struct RaritySpawnRule
+{
+    public Rarity Rarity;
+    public int MaxCount;
 }
