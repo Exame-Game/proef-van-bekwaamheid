@@ -26,8 +26,9 @@ public class ItemPickUp : NetworkBehaviour
     private Renderer _currentHighlightedRenderer;
     private Material[] _originalMaterials;
     private InputAction _interactAction;
-    private PickUpState _state;
     private float _holdTime;
+
+    public PickUpState State;
 
     private void Awake()
     {
@@ -69,20 +70,20 @@ public class ItemPickUp : NetworkBehaviour
 
     private void HandleInput()
     {
-        switch (_state)
+        switch (State)
         {
             case PickUpState.Empty:
                 if (_interactAction.WasPressedThisFrame())
                 {
                     TryPickUpServerRpc();
                     // Move to a transition state to prevent immediate release if the button is held
-                    _state = PickUpState.WaitingForRelease;
+                    State = PickUpState.WaitingForRelease;
                 }
                 break;
 
             case PickUpState.WaitingForRelease:
                 if (_interactAction.WasReleasedThisFrame())
-                    _state = PickUpState.Holding;
+                    State = PickUpState.Holding;
                 break;
 
             case PickUpState.Holding:
@@ -93,7 +94,7 @@ public class ItemPickUp : NetworkBehaviour
                 {
                     // Determines if the action is a simple drop (0) or a physics throw based on hold duration
                     ReleaseItemServerRpc(_holdTime >= _throwHoldTime ? _holdTime : 0f);
-                    _state = PickUpState.Empty;
+                    State = PickUpState.Empty;
                     _holdTime = 0f;
                 }
                 break;
@@ -240,7 +241,7 @@ public class ItemPickUp : NetworkBehaviour
         _onGrab.Invoke();
     }
 
-    private enum PickUpState
+    public enum PickUpState
     {
         Empty,
         WaitingForRelease,
