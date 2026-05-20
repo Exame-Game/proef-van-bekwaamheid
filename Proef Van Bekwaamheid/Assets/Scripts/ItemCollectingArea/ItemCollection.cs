@@ -28,7 +28,7 @@ public class ItemCollection : MonoBehaviour
         Destroy(other.gameObject.GetComponent<Item>());
     }
 
-    private void UpdateInventoryText()
+    public void UpdateInventoryText()
     {
         string text = "";
         foreach (KeyValuePair<Rarity, List<ItemData>> entry in InventoryData.Instance.ItemsByRarity.OrderBy(kvp => (int)kvp.Key))

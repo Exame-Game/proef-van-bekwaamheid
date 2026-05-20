@@ -2,12 +2,12 @@ using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using DG.Tweening;
 
 public class UIManager : MonoBehaviour
 {
     [Header("Initial Client State")]
     [SerializeField] private ClientUIState initialState = ClientUIState.QRScanner;
-
     [Header("Initial Host State")]
     [SerializeField] private HostUIState initialHostState = HostUIState.Lobby;
 
@@ -24,7 +24,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject HostLobbyUI;
     [SerializeField] private GameObject HostGameUI;
 
+    [Header("Slide Settings")]
+    [SerializeField] private float slideDuration = 0.35f;
+    [SerializeField] private Ease slideEase = Ease.OutCubic;
+    [SerializeField] private Vector2 hiddenOffset = new Vector2(-4000f, 0f);
+
     public static UIManager Instance { get; private set; }
+
+    private GameObject _activeClientPanel;
+    private GameObject _activeHostPanel;
 
     private void Awake()
     {
@@ -35,42 +43,107 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
+        HideAllInstant();
         SetClientUIState(initialState);
         SetHostUIState(initialHostState);
     }
 
-    private void SetHostUIState(HostUIState initialHostState)
+    private void HideAllInstant()
     {
-        HostGameUI.SetActive(initialHostState == HostUIState.Game);
-        HostLobbyUI.SetActive(initialHostState == HostUIState.Lobby);
+        GameObject[] all = {
+            ClientMenuUI, ClientQRScannerUI, ClientManualConnectionUI,
+            ClientDisconnectUI, ClientControllerUI, ClientSettingsUI,
+            ClientControlSettingsUI, HostLobbyUI, HostGameUI
+        };
+
+        foreach (GameObject panel in all)
+        {
+            if (panel == null) 
+                continue;
+
+            RectTransform rect = panel.GetComponent<RectTransform>();
+            rect.anchoredPosition = hiddenOffset;
+            panel.SetActive(false);
+        }
+    }
+
+    private void SlideIn(GameObject panel)
+    {
+        if (panel == null) 
+            return;
+
+        panel.SetActive(true);
+        RectTransform rect = panel.GetComponent<RectTransform>();
+        rect.anchoredPosition = hiddenOffset;
+        rect.DOAnchorPos(Vector2.zero, slideDuration)
+            .SetEase(slideEase)
+            .SetUpdate(true);
+    }
+
+    private void SlideOut(GameObject panel, Action onComplete = null)
+    {
+        if (panel == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+        RectTransform rect = panel.GetComponent<RectTransform>();
+        rect.DOAnchorPos(hiddenOffset, slideDuration)
+            .SetEase(slideEase)
+            .SetUpdate(true)
+            .OnComplete(() =>
+            {
+                panel.SetActive(false);
+                onComplete?.Invoke();
+            });
     }
 
     public void SetClientUIState(ClientUIState state)
     {
-        ClientMenuUI.SetActive(state == ClientUIState.Menu);
-        ClientQRScannerUI.SetActive(state == ClientUIState.QRScanner);
-        ClientManualConnectionUI.SetActive(state == ClientUIState.ManualConnection);
-        ClientDisconnectUI.SetActive(state == ClientUIState.Disconnect);
-        ClientControllerUI.SetActive(state == ClientUIState.Controller);
-        ClientSettingsUI.SetActive(state == ClientUIState.Settings);
-        ClientControlSettingsUI.SetActive(state == ClientUIState.ControlSettings);
+        GameObject next = state switch
+        {
+            ClientUIState.Menu => ClientMenuUI,
+            ClientUIState.QRScanner => ClientQRScannerUI,
+            ClientUIState.ManualConnection => ClientManualConnectionUI,
+            ClientUIState.Disconnect => ClientDisconnectUI,
+            ClientUIState.Controller => ClientControllerUI,
+            ClientUIState.Settings => ClientSettingsUI,
+            ClientUIState.ControlSettings => ClientControlSettingsUI,
+            _ => null
+        };
+
+        if (next == _activeClientPanel) 
+            return;
+
+        GameObject previous = _activeClientPanel;
+        _activeClientPanel = next;
+        SlideOut(previous, () => SlideIn(next));
     }
 
-    public void SetClientUIStateFromInt(int stateIndex)
+    private void SetHostUIState(HostUIState state)
     {
-        SetClientUIState((ClientUIState)stateIndex);
+        GameObject next = state switch
+        {
+            HostUIState.Lobby => HostLobbyUI,
+            HostUIState.Game => HostGameUI,
+            _ => null
+        };
+
+        if (next == _activeHostPanel) 
+            return;
+
+        GameObject previous = _activeHostPanel;
+        _activeHostPanel = next;
+        SlideOut(previous, () => SlideIn(next));
     }
 
-    public void SetHostUIStateFromInt(int stateIndex)
-    {
-        SetHostUIState((HostUIState)stateIndex);
-    }
+    public void SetClientUIStateFromInt(int stateIndex) => SetClientUIState((ClientUIState)stateIndex);
+    public void SetHostUIStateFromInt(int stateIndex) => SetHostUIState((HostUIState)stateIndex);
 }
 
 public enum ClientUIState

@@ -13,13 +13,13 @@ public class QRCodeGenerator : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("<color=cyan>[QRCodeGenerator] Initializing — creating 256x256 texture...</color>");
+        //Debug.Log("<color=cyan>[QRCodeGenerator] Initializing — creating 256x256 texture...</color>");
         _storeEncodedTexture = new Texture2D(256, 256);
     }
 
     public void GenerateQRCode(string IPAddress)
     {
-        Debug.Log("<color=cyan>[QRCodeGenerator] GenerateQRCode() called — starting QR code generation process...</color>");
+        //Debug.Log("<color=cyan>[QRCodeGenerator] GenerateQRCode() called — starting QR code generation process...</color>");
         EncodeTextToQRode(IPAddress);
         IPText.text = IPAddress;
     }
@@ -37,7 +37,7 @@ public class QRCodeGenerator : MonoBehaviour
 
         if (_convertPixelToTexture == null || _convertPixelToTexture.Length == 0)
         {
-            Debug.LogError("<color=red>[QRCodeGenerator] Encode() returned empty pixel array — QR texture not updated!</color>");
+            //Debug.LogError("<color=red>[QRCodeGenerator] Encode() returned empty pixel array — QR texture not updated!</color>");
             return;
         }
 
@@ -45,12 +45,12 @@ public class QRCodeGenerator : MonoBehaviour
         _storeEncodedTexture.Apply();
         rawImageReceiver.texture = _storeEncodedTexture;
 
-        Debug.Log($"<color=green>[QRCodeGenerator] QR code generated and applied to RawImage for: \"{textWrite}\"</color>");
+        //Debug.Log($"<color=green>[QRCodeGenerator] QR code generated and applied to RawImage for: \"{textWrite}\"</color>");
     }
 
     private Color32[] Encode(string textForEncoding, int width, int height)
     {
-        Debug.Log($"<color=cyan>[QRCodeGenerator] Encoding QR — text: \"{textForEncoding}\" | size: {width}x{height}</color>");
+        //Debug.Log($"<color=cyan>[QRCodeGenerator] Encoding QR — text: \"{textForEncoding}\" | size: {width}x{height}</color>");
 
         BarcodeWriter writer = new BarcodeWriter
         {

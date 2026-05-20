@@ -51,4 +51,11 @@ public class InventoryData
         if (_itemsByRarity.ContainsKey(item.Rarity))
             _itemsByRarity[item.Rarity].Remove(item);
     }
+    public void ResetInventory()
+    {
+        foreach (Rarity rarity in _itemsByRarity.Keys)
+            _itemsByRarity[rarity].Clear();
+
+        OnItemAdded?.Invoke();
+    }
 }
