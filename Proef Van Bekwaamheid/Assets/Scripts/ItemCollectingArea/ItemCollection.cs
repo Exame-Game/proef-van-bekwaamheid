@@ -10,7 +10,7 @@ public class ItemCollection : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _inventoryText;
     [SerializeField] private Collider _collider;
 
-    [SerializeField] private DOTweenAnimation _tween;
+    private DOTweenAnimation _tween;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -49,5 +49,11 @@ public class ItemCollection : MonoBehaviour
         _tween.DOPlay();
         yield return new WaitForSeconds(_tween.duration);
         _tween.gameObject.SetActive(false);
+    }
+
+    public void ResetInventory()
+    {
+        InventoryData.Instance.ResetInventory();
+        UpdateInventoryText();
     }
 }
