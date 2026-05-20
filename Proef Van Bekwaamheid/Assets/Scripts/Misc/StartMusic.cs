@@ -4,6 +4,6 @@ public class StartMusic : MonoBehaviour
 {
     void Start()
     {
-        MusicManager.Instance.PlayMusic("Day Music");
+        MusicManager.Instance.PlayMusic("DayMusic");
     }
 }
