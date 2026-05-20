@@ -1,9 +1,12 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : NetworkBehaviour
 {
+    [SerializeField] private UnityEvent StartMove;
+    [SerializeField] private UnityEvent stopMove;
     [SerializeField] private Rigidbody _rb;
     //[SerializeField] private ItemPickUp _itemPickUp;
     
@@ -16,6 +19,7 @@ public class PlayerController : NetworkBehaviour
 
     private Vector2 _move;
     private Vector2 _smoothedMove;
+    private bool _wasMovingLastFrame;
 
     private void FixedUpdate()
     {
@@ -35,6 +39,11 @@ public class PlayerController : NetworkBehaviour
 
         if (movement != Vector3.zero)
         {
+            if (!_wasMovingLastFrame)
+            {
+                StartMove.Invoke();
+                _wasMovingLastFrame = true;
+            }
             Quaternion targetRotation = Quaternion.LookRotation(movement);
 
             _rb.MoveRotation(Quaternion.Slerp(
@@ -42,6 +51,14 @@ public class PlayerController : NetworkBehaviour
                 targetRotation,
                 RotationSpeed * Time.fixedDeltaTime
             ));
+        }
+        else
+        {
+            if (_wasMovingLastFrame)
+            {
+                stopMove.Invoke();
+                _wasMovingLastFrame = false;
+            }
         }
 
         _rb.MovePosition(_rb.position + movement * Speed * Time.fixedDeltaTime);
