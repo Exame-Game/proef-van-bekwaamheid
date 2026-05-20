@@ -47,7 +47,6 @@ public class ItemCollection : MonoBehaviour
     private IEnumerator Tween()
     {
         _tween.DOPlay();
-        Debug.Log(_tween.duration);
         yield return new WaitForSeconds(_tween.duration);
         _tween.gameObject.SetActive(false);
     }
