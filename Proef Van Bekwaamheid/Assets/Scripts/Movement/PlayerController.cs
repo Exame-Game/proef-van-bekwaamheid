@@ -8,10 +8,9 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private UnityEvent StartMove;
     [SerializeField] private UnityEvent stopMove;
     [SerializeField] private Rigidbody _rb;
-    //[SerializeField] private ItemPickUp _itemPickUp;
     
-    public NetworkVariable<Vector3> MoveDirection =
-        new NetworkVariable<Vector3>(Vector3.zero);
+
+    public NetworkVariable<Vector3> MoveDirection = new NetworkVariable<Vector3>(Vector3.zero);
 
     public float Speed = 7f;
     public float RotationSpeed = 10f;
@@ -20,11 +19,27 @@ public class PlayerController : NetworkBehaviour
     private Vector2 _move;
     private Vector2 _smoothedMove;
     private bool _wasMovingLastFrame;
+    private bool _canMove = true;
+
+    private void Start()
+    {
+        GameTimer gameTimer = FindFirstObjectByType<GameTimer>();
+        if (gameTimer != null)
+        {
+            gameTimer.OnGameLost.AddListener(DisableMovement);
+        }
+    }
 
     private void FixedUpdate()
     {
-        if (!IsServer) 
+        if (!IsServer)
             return;
+
+        if (!_canMove)
+        {
+            _move = Vector2.zero;
+            _smoothedMove = Vector2.zero;
+        }
 
         _smoothedMove = Vector2.Lerp(_smoothedMove, _move, InputSmoothing);
         MovePlayer();
@@ -33,7 +48,6 @@ public class PlayerController : NetworkBehaviour
     private void MovePlayer()
     {
         Vector3 movement = new Vector3(_smoothedMove.x, 0f, _smoothedMove.y);
-
         if (movement.sqrMagnitude < 0.001f)
             movement = Vector3.zero;
 
@@ -45,7 +59,6 @@ public class PlayerController : NetworkBehaviour
                 _wasMovingLastFrame = true;
             }
             Quaternion targetRotation = Quaternion.LookRotation(movement);
-
             _rb.MoveRotation(Quaternion.Slerp(
                 _rb.rotation,
                 targetRotation,
@@ -62,13 +75,15 @@ public class PlayerController : NetworkBehaviour
         }
 
         _rb.MovePosition(_rb.position + movement * Speed * Time.fixedDeltaTime);
-
         MoveDirection.Value = movement;
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!IsOwner) 
+        if (!IsOwner)
+            return;
+
+        if (!_canMove)
             return;
 
         Vector2 input = context.ReadValue<Vector2>();
@@ -79,5 +94,12 @@ public class PlayerController : NetworkBehaviour
     private void SendMoveServerRpc(Vector2 input)
     {
         _move = input;
+    }
+
+    private void DisableMovement()
+    {
+        _canMove = false;
+        _move = Vector2.zero;
+        _smoothedMove = Vector2.zero;
     }
 }
