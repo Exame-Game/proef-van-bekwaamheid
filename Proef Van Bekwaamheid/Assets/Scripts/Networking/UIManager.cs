@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject ClientControllerUI;
     [SerializeField] private GameObject ClientSettingsUI;
     [SerializeField] private GameObject ClientControlSettingsUI;
+    [SerializeField] private GameObject ClientReadyUI;
 
     [Header("Host UI Panels")]
     [SerializeField] private GameObject HostLobbyUI;
@@ -58,7 +59,7 @@ public class UIManager : MonoBehaviour
         GameObject[] all = {
             ClientMenuUI, ClientQRScannerUI, ClientManualConnectionUI,
             ClientDisconnectUI, ClientControllerUI, ClientSettingsUI,
-            ClientControlSettingsUI, HostLobbyUI, HostGameUI
+            ClientControlSettingsUI, ClientReadyUI, HostLobbyUI, HostGameUI
         };
 
         foreach (GameObject panel in all)
@@ -114,6 +115,7 @@ public class UIManager : MonoBehaviour
             ClientUIState.Controller => ClientControllerUI,
             ClientUIState.Settings => ClientSettingsUI,
             ClientUIState.ControlSettings => ClientControlSettingsUI,
+            ClientUIState.Ready => ClientReadyUI,
             _ => null
         };
 
@@ -154,7 +156,8 @@ public enum ClientUIState
     Disconnect = 3,
     Controller = 4,
     Settings = 5,
-    ControlSettings = 6
+    ControlSettings = 6, 
+    Ready = 7
 }
 
 public enum HostUIState
