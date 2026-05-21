@@ -2,6 +2,13 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
+[System.Serializable]
+public struct RaritySpawnRule
+{
+    public Rarity Rarity;
+    public int MaxCount;
+}
+
 public class ItemSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject[] _spawnPoints;
@@ -102,11 +109,4 @@ public class ItemSpawner : MonoBehaviour
 
         _currentItems = 0;
     }
-}
-
-[System.Serializable]
-public struct RaritySpawnRule
-{
-    public Rarity Rarity;
-    public int MaxCount;
 }
