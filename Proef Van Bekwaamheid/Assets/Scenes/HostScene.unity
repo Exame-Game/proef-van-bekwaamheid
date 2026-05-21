@@ -1257,6 +1257,14 @@ PrefabInstance:
       propertyPath: m_InnerSpotAngle
       value: 89.06273
       objectReference: {fileID: 0}
+    - target: {fileID: 3582525783624514524, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582525783624514524, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 4587090828591689070, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.2
@@ -1296,6 +1304,10 @@ PrefabInstance:
     - target: {fileID: 4587090828591689070, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6933371408468806267, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2825,6 +2837,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1600215086}
     m_Modifications:
+    - target: {fileID: 2853146423509369573, guid: 85acae7fb7c68a249b8b674ae1b2ffab, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4440201851415251650, guid: 85acae7fb7c68a249b8b674ae1b2ffab, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.6
@@ -2876,6 +2892,14 @@ PrefabInstance:
     - target: {fileID: 7904993438748993200, guid: 85acae7fb7c68a249b8b674ae1b2ffab, type: 3}
       propertyPath: m_Intensity
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7904993438748993200, guid: 85acae7fb7c68a249b8b674ae1b2ffab, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7904993438748993200, guid: 85acae7fb7c68a249b8b674ae1b2ffab, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3646,7 +3670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7214c7d5617ac4784ba518c762a207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _minIntensity: 2
+  _minIntensity: 10
   _maxIntensity: 15
   _speed: 3
 --- !u!114 &593667798
@@ -3662,7 +3686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
@@ -3695,10 +3719,10 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.7
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -3731,7 +3755,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -6194,7 +6218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7214c7d5617ac4784ba518c762a207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _minIntensity: 2
+  _minIntensity: 10
   _maxIntensity: 15
   _speed: 3
 --- !u!114 &1225163054
@@ -6210,7 +6234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
@@ -6243,10 +6267,10 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.7
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -6279,7 +6303,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -7426,6 +7450,14 @@ PrefabInstance:
       propertyPath: m_InnerSpotAngle
       value: 179
       objectReference: {fileID: 0}
+    - target: {fileID: 3582525783624514524, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582525783624514524, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 4587090828591689070, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -22.3
@@ -7466,6 +7498,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6933371408468806267, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7492,6 +7528,10 @@ PrefabInstance:
     - target: {fileID: 593526433026124242, guid: b8bd746d3547b9049b7f8704e6af6a62, type: 3}
       propertyPath: m_Name
       value: Small_Room_Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086525538960641666, guid: b8bd746d3547b9049b7f8704e6af6a62, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6337097477194186728, guid: b8bd746d3547b9049b7f8704e6af6a62, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7540,6 +7580,14 @@ PrefabInstance:
     - target: {fileID: 7959640793136458244, guid: b8bd746d3547b9049b7f8704e6af6a62, type: 3}
       propertyPath: m_Intensity
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7959640793136458244, guid: b8bd746d3547b9049b7f8704e6af6a62, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7959640793136458244, guid: b8bd746d3547b9049b7f8704e6af6a62, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10959,7 +11007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7214c7d5617ac4784ba518c762a207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _minIntensity: 2
+  _minIntensity: 10
   _maxIntensity: 15
   _speed: 3
 --- !u!114 &1799336715
@@ -10975,7 +11023,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
@@ -11008,10 +11056,10 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.7
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -11044,7 +11092,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -11226,6 +11274,14 @@ PrefabInstance:
       propertyPath: m_InnerSpotAngle
       value: 54.709187
       objectReference: {fileID: 0}
+    - target: {fileID: 3582525783624514524, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582525783624514524, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 4587090828591689070, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.3
@@ -11265,6 +11321,10 @@ PrefabInstance:
     - target: {fileID: 4587090828591689070, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6933371408468806267, guid: dc9caafcb71d89f4bb450bbc7ab4034c, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11562,9 +11622,21 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 6250227080471251435, guid: f0eb264a2dd131d4a8aab54cbfe86ab7, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250227080471251435, guid: f0eb264a2dd131d4a8aab54cbfe86ab7, type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 6496780590027665887, guid: f0eb264a2dd131d4a8aab54cbfe86ab7, type: 3}
       propertyPath: m_Name
       value: Main_Entrance_Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797433000972894928, guid: f0eb264a2dd131d4a8aab54cbfe86ab7, type: 3}
+      propertyPath: m_AdditionalLightsShadowResolutionTier
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

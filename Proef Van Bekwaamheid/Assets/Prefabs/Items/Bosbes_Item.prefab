@@ -51,10 +51,10 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: acc24d9811b02a04ea133e748a789ee2, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f6aac351fc9eb1644962cd654effbed3, type: 2}
+      objectReference: {fileID: 2100000, guid: b6b5958d5ca82d84ebedf0e83a5a1b11, type: 2}
     - target: {fileID: 919132149155446097, guid: acc24d9811b02a04ea133e748a789ee2, type: 3}
       propertyPath: m_Name
-      value: Prefab_Bosbes
+      value: Bosbes_Item
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: acc24d9811b02a04ea133e748a789ee2, type: 3}
       propertyPath: m_Layer

@@ -451,9 +451,10 @@ MonoBehaviour:
   _wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  _occlusionRadius: 1.5
   _fadeAlpha: 0.5
   _fadeSpeed: 8
+  _playerHeight: 1.8
+  _heightSamples: 3
 --- !u!114 &7814399446297699552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,7 +504,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _highlightMaterial: {fileID: 2100000, guid: e37a5c6150e524f4688337195e948a03, type: 2}
-  _throwForce: 10
+  _throwForce: 25
   _throwHoldTime: 0.3
   _pickUpRange: 2
   _pickUpOffset: 1
