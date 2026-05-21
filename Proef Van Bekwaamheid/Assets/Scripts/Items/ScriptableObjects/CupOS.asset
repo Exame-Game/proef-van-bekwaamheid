@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CupOS
   m_EditorClassIdentifier: Assembly-CSharp::ItemSO
   Rarity: 0
-  Prefab: {fileID: 1673498232174238797, guid: a4c7c4a1d2d1c744dae2730ad1ac11f0, type: 3}
+  Prefab: {fileID: 1673498232174238797, guid: fd368eeedf9e0dc489989e50530271de, type: 3}
   Value: 0
   Weight: 0
   Name: Cup

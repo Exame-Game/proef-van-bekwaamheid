@@ -24,10 +24,13 @@ public class ConnectionManager : MonoBehaviour
 
     [SerializeField] private TMP_InputField clientIpInputField;
 
+    [SerializeField] private Transform[] spawnPoints;
+
     private Coroutine _scanCoroutine;
     private bool _isScanning;
-
     private bool _isHost;
+
+    private int _nextSpawnIndex = 0;
 
     private void OnEnable()
     {
@@ -178,7 +181,12 @@ public class ConnectionManager : MonoBehaviour
         if (!isApproved)
             return;
 
+        Transform spawnPoint = spawnPoints[_nextSpawnIndex % spawnPoints.Length];
+        _nextSpawnIndex++;
+
         response.CreatePlayerObject = true;
+        response.Position = spawnPoint.position;
+        response.Rotation = spawnPoint.rotation;
     }
 
     private void OnClientDisconnected(ulong clientId)

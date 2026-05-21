@@ -48,6 +48,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2484921068739079471, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2484921068739079471, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.38680577
+      objectReference: {fileID: 0}
+    - target: {fileID: -2484921068739079471, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2008889676142754349, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -59,6 +71,26 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
       propertyPath: m_Name
       value: Prefab_Eikenlamp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3316992658331686828, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3316992658331686828, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.41083115
+      objectReference: {fileID: 0}
+    - target: {fileID: 3316992658331686828, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424160229100996805, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424160229100996805, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7071182760956848314, guid: f2bf7ac708e28794e90cc2bb3c46952b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -92,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b991a8e758c58444bef3d94216daef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  _itemSO: {fileID: 0}
-  Collider: {fileID: 0}
+  _itemSO: {fileID: 11400000, guid: 8ac3aad58a18f8746978d346cd16311e, type: 2}
+  Collider: {fileID: 5700834439990964792}
 --- !u!65 &5700834439990964792
 BoxCollider:
   m_ObjectHideFlags: 0

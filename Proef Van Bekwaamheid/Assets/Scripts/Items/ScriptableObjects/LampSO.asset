@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LampSO
   m_EditorClassIdentifier: Assembly-CSharp::ItemSO
   Rarity: 1
-  Prefab: {fileID: 7061197144453445449, guid: dc8b881c0795d8a4c84da1444facb0de, type: 3}
+  Prefab: {fileID: 9018257336577661943, guid: 475b61b7433ea504ea082ea038919ea3, type: 3}
   Value: 0
   Weight: 0
   Name: Lamp
