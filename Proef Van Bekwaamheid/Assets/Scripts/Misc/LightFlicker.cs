@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class LightFlicker : MonoBehaviour
 {
-    [SerializeField] private float _minIntensity = 0.5f;
-    [SerializeField] private float _maxIntensity = 1f;
-    [SerializeField] private float _speed = 1f;
+    public float _minIntensity = 0.5f;
+    public float _maxIntensity = 1f;
+    public float _speed = 1f;
 
     private Light _light;
 

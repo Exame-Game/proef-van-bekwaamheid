@@ -20,9 +20,7 @@ public class CheckFirstPickup : MonoBehaviour
         _itemCollider = new Collider[items.Length];
 
         for (int i = 0; i < _itemCollider.Length; i++)
-        {
             _itemCollider[i] = items[i].gameObject.GetComponent<Collider>();
-        }
     }
 
     void Update()
