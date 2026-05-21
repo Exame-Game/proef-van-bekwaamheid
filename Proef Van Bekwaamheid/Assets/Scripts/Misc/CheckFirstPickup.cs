@@ -10,9 +10,15 @@ public class CheckFirstPickup : MonoBehaviour
 
     void Start()
     {
+        Initialise();
+    }
+
+    public void Initialise()
+    {
+        _itemCollider = null;
         Item[] items = FindObjectsByType<Item>(FindObjectsSortMode.None);
         _itemCollider = new Collider[items.Length];
-        
+
         for (int i = 0; i < _itemCollider.Length; i++)
         {
             _itemCollider[i] = items[i].gameObject.GetComponent<Collider>();
