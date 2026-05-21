@@ -8,6 +8,8 @@ public class PlayerWallOcclusion : NetworkBehaviour
     [SerializeField] private LayerMask _wallLayer;
     [SerializeField] private float _fadeAlpha = 0.15f;
     [SerializeField] private float _fadeSpeed = 8f;
+    [SerializeField] private float _playerHeight = 1.8f;
+    [SerializeField] private int _heightSamples = 3;
 
     private Camera _cam;
     private Dictionary<Renderer, bool> _rendererStates = new Dictionary<Renderer, bool>();
@@ -23,32 +25,40 @@ public class PlayerWallOcclusion : NetworkBehaviour
         if (_cam == null)
             return;
 
-        Vector3 direction = transform.position - _cam.transform.position;
-        float distance = direction.magnitude;
-
         _currentFrameHits.Clear();
 
-        RaycastHit[] hits = Physics.RaycastAll(
-            _cam.transform.position,
-            direction.normalized,
-            distance,
-            _wallLayer
-        );
+        for (int i = 0; i < _heightSamples; i++)
+        {
+            float t = _heightSamples == 1 ? 0.5f : (float)i / (_heightSamples - 1);
+            Vector3 target = transform.position + Vector3.up * (_playerHeight * t);
 
-        foreach (RaycastHit hit in hits)
-            foreach (Renderer r in hit.collider.GetComponentsInChildren<Renderer>())
-            {
-                if (_currentFrameHits.Contains(r))
-                    continue;
+            Vector3 screenPos = _cam.WorldToScreenPoint(target);
+            Ray ray = _cam.ScreenPointToRay(screenPos);
+            float distance = Vector3.Distance(_cam.transform.position, target);
 
-                _currentFrameHits.Add(r);
-                _rendererStates[r] = true;
-            }
+            RaycastHit[] hits = Physics.RaycastAll(
+                ray.origin,
+                ray.direction,
+                distance,
+                _wallLayer
+            );
 
-        List<Renderer> keys = new List<Renderer>(_rendererStates.Keys);
+            Debug.DrawLine(ray.origin, target, Color.cyan);
+
+            foreach (RaycastHit hit in hits)
+                foreach (Renderer r in hit.collider.GetComponentsInChildren<Renderer>())
+                {
+                    if (_currentFrameHits.Contains(r))
+                        continue;
+
+                    _currentFrameHits.Add(r);
+                    _rendererStates[r] = true;
+                }
+        }
+
         List<Renderer> toRemove = new List<Renderer>();
 
-        foreach (Renderer r in keys)
+        foreach (Renderer r in new List<Renderer>(_rendererStates.Keys))
         {
             if (r == null)
             {
