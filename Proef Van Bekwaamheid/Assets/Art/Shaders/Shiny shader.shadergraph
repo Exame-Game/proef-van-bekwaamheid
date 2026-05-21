@@ -383,7 +383,7 @@
     },
     "m_PreviewData": {
         "serializedMesh": {
-            "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
+            "m_SerializedMesh": "{\"mesh\":{\"fileID\":10200,\"guid\":\"0000000000000000e000000000000000\",\"type\":0}}",
             "m_Guid": ""
         },
         "preventRotation": false
@@ -1585,8 +1585,8 @@
     "m_ObjectId": "86e3fd1969f2448e88153fb2f4350b95",
     "m_Title": "Rotation",
     "m_Position": {
-        "x": -1387.0001220703125,
-        "y": -105.00001525878906
+        "x": -1387.0,
+        "y": -104.99999237060547
     }
 }
 
@@ -1895,7 +1895,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Smoothness",
     "m_StageCapability": 2,
-    "m_Value": 0.5,
+    "m_Value": 0.0,
     "m_DefaultValue": 0.5,
     "m_Labels": [],
     "m_LiteralMode": false
@@ -2425,8 +2425,8 @@
     "m_ObjectId": "d5aa4c78502442a591e31acd0778514a",
     "m_Title": "CycleTime",
     "m_Position": {
-        "x": -1387.0001220703125,
-        "y": 363.0
+        "x": -1387.0,
+        "y": 362.99993896484377
     }
 }
 

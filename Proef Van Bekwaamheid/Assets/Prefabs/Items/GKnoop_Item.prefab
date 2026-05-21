@@ -51,10 +51,10 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 8573cd7ad2ef03140b7e0629e8d5cc8d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3c117b5632e36a947a9c15ce3398566f, type: 2}
+      objectReference: {fileID: 2100000, guid: cdd28644f0f73e1478eb634210d1a1a9, type: 2}
     - target: {fileID: 919132149155446097, guid: 8573cd7ad2ef03140b7e0629e8d5cc8d, type: 3}
       propertyPath: m_Name
-      value: prefab_Gknoop
+      value: GKnoop_Item
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8573cd7ad2ef03140b7e0629e8d5cc8d, type: 3}
       propertyPath: m_Layer
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1626229118
+  GlobalObjectIdHash: 3452968864
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
