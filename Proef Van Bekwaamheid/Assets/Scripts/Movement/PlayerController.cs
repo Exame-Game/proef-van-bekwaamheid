@@ -9,7 +9,6 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private UnityEvent stopMove;
     [SerializeField] private Rigidbody _rb;
 
-
     public NetworkVariable<Vector3> MoveDirection = new NetworkVariable<Vector3>(Vector3.zero);
 
     public float Speed = 7f;
