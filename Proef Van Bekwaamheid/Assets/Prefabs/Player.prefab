@@ -451,7 +451,7 @@ MonoBehaviour:
   _wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  _fadeAlpha: 0.15
+  _fadeAlpha: 0.3
   _fadeSpeed: 8
 --- !u!114 &7814399446297699552
 MonoBehaviour:

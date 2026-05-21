@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7778174334396144940}
   - component: {fileID: 8155233595766385538}
   m_Layer: 3
-  m_Name: Prefab_cup
+  m_Name: Cup_Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -21,13 +21,15 @@ public class DayNightCycle : MonoBehaviour
 
     public void ApplyCycle(float t)
     {
+
+        float shifted = (t + 0.5f) % 1f;
         // 0 = midnight, 0.25 = sunrise, 0.5 = noon, 0.75 = sunset
-        transform.localRotation = Quaternion.Euler((t * 360f) - 90f, 170f, 0f);
+        transform.localRotation = Quaternion.Euler((shifted * 360f) - 90f, 170f, 0f);
 
-        _sun.color = _sunColor.Evaluate(t);
-        _sun.intensity = _sunIntensity.Evaluate(t);
+        _sun.color = _sunColor.Evaluate(shifted);
+        _sun.intensity = _sunIntensity.Evaluate(shifted + .2f);
 
-        RenderSettings.ambientLight = _ambientColor.Evaluate(t);
+        RenderSettings.ambientLight = _ambientColor.Evaluate(shifted);
 
         DynamicGI.UpdateEnvironment();
     }
