@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 49b10a28c15b5df42b5c254791312807, type: 2}
     - target: {fileID: 919132149155446097, guid: 74316d09d7b8f0d469aef46fac3fd0bb, type: 3}
       propertyPath: m_Name
-      value: Prefab_Lantaarnlamp 1
+      value: Lantern_Item
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 74316d09d7b8f0d469aef46fac3fd0bb, type: 3}
       propertyPath: m_Layer
@@ -83,6 +83,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3355857424261850030}
   m_SourcePrefab: {fileID: 100100000, guid: 74316d09d7b8f0d469aef46fac3fd0bb, type: 3}
+--- !u!4 &8533364619252973901 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 74316d09d7b8f0d469aef46fac3fd0bb, type: 3}
+  m_PrefabInstance: {fileID: 8207283198133577382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9018257336577661943 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 74316d09d7b8f0d469aef46fac3fd0bb, type: 3}
@@ -276,7 +281,7 @@ MonoBehaviour:
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 5237426530210261057, guid: 4746eed58d8801745bbfe32750d3c177, type: 3}
+  target: {fileID: 8533364619252973901}
   animationType: 5
   targetType: 11
   forcedTargetType: 0

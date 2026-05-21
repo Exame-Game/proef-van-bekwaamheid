@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1908c66accbf6424daed919aad29a54b, type: 2}
     - target: {fileID: 919132149155446097, guid: 8573cd7ad2ef03140b7e0629e8d5cc8d, type: 3}
       propertyPath: m_Name
-      value: prefab_Rknoop
+      value: Rknoop_Item
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8573cd7ad2ef03140b7e0629e8d5cc8d, type: 3}
       propertyPath: m_Layer
@@ -276,7 +276,7 @@ MonoBehaviour:
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 5237426530210261057, guid: 4746eed58d8801745bbfe32750d3c177, type: 3}
+  target: {fileID: 655810650653844341}
   animationType: 5
   targetType: 11
   forcedTargetType: 0
@@ -329,3 +329,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!4 &655810650653844341 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8573cd7ad2ef03140b7e0629e8d5cc8d, type: 3}
+  m_PrefabInstance: {fileID: 1050272415824643230}
+  m_PrefabAsset: {fileID: 0}
