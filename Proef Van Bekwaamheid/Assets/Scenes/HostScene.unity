@@ -4712,7 +4712,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1683431670}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -9418,6 +9418,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
       objectReference: {fileID: 1306163406}
+    - target: {fileID: 918287034482033908, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1152942915049089127, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -9465,6 +9469,10 @@ PrefabInstance:
     - target: {fileID: 3755853991525871952, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857375108338648536, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5029885599157387034, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
       propertyPath: m_IsActive
@@ -9614,10 +9622,30 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
       objectReference: {fileID: 1306163406}
+    - target: {fileID: 7141977018766576715, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218846936782846382, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7988767869044744708, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1306163406}
+    - target: {fileID: 8612517368168094298, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8612517368168094298, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8731877265852760620, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8754819819716092387, guid: 1b60dd8e172093c4a86afa0ca371c23e, type: 3}
       propertyPath: m_text
       value: Restart
