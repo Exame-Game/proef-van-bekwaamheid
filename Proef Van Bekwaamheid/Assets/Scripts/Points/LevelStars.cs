@@ -1,8 +1,9 @@
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using System.Linq;
 using DG.Tweening;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class RarityStarPoints
@@ -21,6 +22,8 @@ public class LevelStars : MonoBehaviour
     [SerializeField] private float _fillDuration = 0.5f;
     [SerializeField] private float _delayBetweenStars = 0.1f;
     [SerializeField] private Ease _fillEase = Ease.OutCubic;
+
+    public UnityEvent OnThreeStars;
 
     private int[] _starPointRequirements;
     private Dictionary<Rarity, int> _rarityPointsMap;
@@ -97,8 +100,10 @@ public class LevelStars : MonoBehaviour
         float[] fillAmounts = GetStarFillAmounts(totalStarPoints);
         int filledStars = fillAmounts.Count(x => x >= 1f);
         if (filledStars == 3 && !_hasReachedThreeStars)
+        {
             _hasReachedThreeStars = true;
-        // TODO: Add any behavior for reaching 3 stars (unlock, sound, etc.)
+            OnThreeStars?.Invoke();
+        }
     }
 
     private float[] GetStarFillAmounts(float totalStarPoints)
