@@ -45,7 +45,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 1599146242623999576}
   - component: {fileID: 4975641729000993397}
   - component: {fileID: 5108136566827485806}
+  - component: {fileID: 7608428115450438116}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -241,6 +242,18 @@ MonoBehaviour:
   - groupID: DropBox
     clips:
     - {fileID: 8300000, guid: 12c39915940205b41ae0cfd05eb8efdd, type: 3}
+--- !u!114 &7608428115450438116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2223927284468616527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2f0c0a9aac60748970e4d76995f42c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayMusic
 --- !u!1 &3127644165935658500
 GameObject:
   m_ObjectHideFlags: 0

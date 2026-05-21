@@ -220,6 +220,7 @@ public class ItemPickUp : NetworkBehaviour
 
         _isHolding.Value = false;
         _heldItem = null;
+        SoundManager.Instance.PlaySound2D("Throw");
 
         _onRelease.Invoke();
     }
