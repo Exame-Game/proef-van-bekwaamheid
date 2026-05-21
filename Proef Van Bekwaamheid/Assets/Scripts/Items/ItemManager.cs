@@ -7,10 +7,11 @@ public class ItemSpawner : MonoBehaviour
     [SerializeField] private GameObject[] _spawnPoints;
     [SerializeField] private LayerMask _itemLayer;
     [SerializeField] private LayerMask _groundLayer;
-
     [SerializeField] private RaritySpawnRule[] _rarityRules;
 
     public List<ItemSO> AvailableItems;
+
+    private int _currentItems = 0;
 
     private void Start()
     {
@@ -22,11 +23,15 @@ public class ItemSpawner : MonoBehaviour
         if (!NetworkManager.Singleton.IsServer)
             return;
 
+        ResetItems();
         SpawnItems();
     }
 
     public void SpawnItems()
     {
+        if (!NetworkManager.Singleton.IsServer)
+            return;
+
         Dictionary<Rarity, int> spawnedCounts = new Dictionary<Rarity, int>();
         Dictionary<Rarity, int> maxCounts = new Dictionary<Rarity, int>();
 
@@ -39,12 +44,8 @@ public class ItemSpawner : MonoBehaviour
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
             List<ItemSO> affordable = AvailableItems.FindAll(item => spawnedCounts[item.Rarity] < maxCounts[item.Rarity]);
-
-            if (affordable.Count == 0) 
+            if (affordable.Count == 0)
                 break;
-
-            // if (_currentItems >= _maxItems)
-            //     break;
 
             GameObject spawnPoint = _spawnPoints[i];
             if (spawnPoint == null)
@@ -57,28 +58,25 @@ public class ItemSpawner : MonoBehaviour
             int randomIndex = Random.Range(0, affordable.Count);
             ItemSO selectedItem = affordable[randomIndex];
             GameObject prefab = selectedItem.Prefab;
-
             if (prefab == null)
                 continue;
 
             Ray ray = new Ray(spawnPoint.transform.position, Vector3.down);
-
             if (Physics.Raycast(ray, out RaycastHit hit, 10f, _groundLayer))
             {
                 GameObject obj = Instantiate(prefab, hit.point, Quaternion.identity);
 
-                // NetworkObject netObj = obj.GetComponent<NetworkObject>();
-                // if (netObj != null)
-                //     netObj.Spawn();
+                NetworkObject netObj = obj.GetComponent<NetworkObject>();
+                if (netObj != null)
+                    netObj.Spawn();
 
                 Item item = obj.GetComponent<Item>();
-
                 if (item != null && item.Collider != null)
                 {
                     float halfHeight = item.Collider.bounds.extents.y;
                     obj.transform.position = hit.point + Vector3.up * halfHeight;
                 }
-
+                _currentItems++;
                 spawnedCounts[selectedItem.Rarity]++;
             }
         }
@@ -86,16 +84,23 @@ public class ItemSpawner : MonoBehaviour
 
     public void ResetItems()
     {
-        Item[] items = FindObjectsOfType<Item>();
+        if (!NetworkManager.Singleton.IsServer)
+            return;
 
+        Item[] items = FindObjectsOfType<Item>();
         foreach (Item item in items)
         {
-            if (item == null) 
+            if (item == null)
                 continue;
+
+             NetworkObject netObj = item.GetComponent<NetworkObject>();
+             if (netObj != null && netObj.IsSpawned)
+                 netObj.Despawn();
 
             Destroy(item.gameObject);
         }
-        SpawnItems();
+
+        _currentItems = 0;
     }
 }
 
