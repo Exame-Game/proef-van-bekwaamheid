@@ -27,6 +27,12 @@ public class PlayerController : NetworkBehaviour
         {
             gameTimer.OnGameLost.AddListener(DisableMovement);
         }
+
+        LevelStars levelStars = FindFirstObjectByType<LevelStars>();
+        if (levelStars != null)
+        {
+            levelStars.OnThreeStars.AddListener(DisableMovement);
+        }
     }
 
     private void FixedUpdate()
