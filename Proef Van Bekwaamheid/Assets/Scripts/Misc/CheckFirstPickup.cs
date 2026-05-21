@@ -4,9 +4,9 @@ using UnityEngine.Events;
 
 public class CheckFirstPickup : MonoBehaviour
 {
-    private Collider[] _itemCollider;
-
     [SerializeField] private UnityEvent _onFirstPickUp;
+
+    private Collider[] _itemCollider;
 
     void Start()
     {
