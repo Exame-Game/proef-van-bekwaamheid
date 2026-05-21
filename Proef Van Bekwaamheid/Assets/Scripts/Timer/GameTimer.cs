@@ -29,6 +29,7 @@ public class GameTimer : MonoBehaviour
     {
         _timeRemaining = _totalTime;
         _isGameOver = false;
+        UpdateHourglass(_totalTime);
     }
 
     public void StartTimerAndCycle()

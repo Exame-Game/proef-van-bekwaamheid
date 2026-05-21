@@ -1,9 +1,11 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
+using UnityEngine.Events;
 
 public class RestartGame : MonoBehaviour
 {
+    [SerializeField] private UnityEvent _onGameReset;
     public ConnectionManager connectionManager;
     public ItemSpawner itemSpawner;
     public ItemCollection itemCollection;
@@ -35,5 +37,7 @@ public class RestartGame : MonoBehaviour
 
         InventoryData.Instance.ResetInventory();
         itemCollection.UpdateInventoryText();
+        
+        _onGameReset?.Invoke();
     }
 }
