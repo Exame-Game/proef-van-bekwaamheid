@@ -199,7 +199,7 @@ MonoBehaviour:
   - trackName: NightMusic
     clip: {fileID: 8300000, guid: f54be49e11ddcb9459bab2e80b34ed45, type: 3}
   - trackName: Alarm
-    clip: {fileID: 8300000, guid: 825b91bdf282583408b3210305ac8bed, type: 3}
+    clip: {fileID: 8300000, guid: 4b6be716de6479e42a32b2c9ab3b859f, type: 3}
 --- !u!114 &4975641729000993397
 MonoBehaviour:
   m_ObjectHideFlags: 0
