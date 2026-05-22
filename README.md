@@ -4,7 +4,7 @@
 - **[Item Spawner](#item-spawner)** > Merijn Florie / Florian Bruijn
 - **[Inventory System](#inventory-system)** > Leon Kruijer / Florian Bruijn
 - **[Item Collection](#item-collection)** > Leon Kruijer
-- **[Item Pickup](#item-pickup)** > Leon Kruijer
+- **[Item Interaction](#item-interaction)** > Leon Kruijer
 
 ### Networking & Camera
 - **[Connection Manager](#connection-manager)** > Merijn Florie
